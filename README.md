@@ -1,2 +1,2 @@
-# color_detection_PyQt
+# Color detection with PyQt
 Creating an interface for color detection
