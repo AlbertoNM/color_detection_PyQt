@@ -2,11 +2,11 @@ import cv2
 import imutils
 from our_tools.colors import colores
 
-def color_area(mask, frame, text):
+def color_area(mask, frame, text, area):
 
     for c in mask:
         area1 = cv2.contourArea(c)
-        if area1 > 5000:
+        if area1 > area:
             cv2.drawContours(frame, [cv2.convexHull(c)], 0, (255, 255, 255), 3)
             M = cv2.moments(c)
             cx = int(M["m10"]/M["m00"])
@@ -19,7 +19,7 @@ def contours(face):
     cnts = cv2.findContours(face, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     return imutils.grab_contours(cnts)
 
-def color_detection(frame):
+def color_detection(frame, area):
 
     """Detectar el color del frame dado
 
@@ -43,12 +43,12 @@ def color_detection(frame):
     cntsAz = contours(blue_mask)
     cntsM = contours(purple_mask)
 
-    color_area(cntsR, frame, colores["rojo"]["nombre"])
-    color_area(cntsN, frame, colores["naranja"]["nombre"])
-    color_area(cntsA, frame, colores["amarillo"]["nombre"])
-    color_area(cntsV, frame, colores["verde"]["nombre"])
-    color_area(cntsAz, frame, colores["azul"]["nombre"])
-    color_area(cntsM, frame, colores["morado"]["nombre"])
+    color_area(cntsR, frame, colores["rojo"]["nombre"], area)
+    color_area(cntsN, frame, colores["naranja"]["nombre"], area)
+    color_area(cntsA, frame, colores["amarillo"]["nombre"], area)
+    color_area(cntsV, frame, colores["verde"]["nombre"], area)
+    color_area(cntsAz, frame, colores["azul"]["nombre"], area)
+    color_area(cntsM, frame, colores["morado"]["nombre"], area)
 
 def make_roi(frame):
 

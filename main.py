@@ -5,31 +5,68 @@ from PyQt5.QtGui import *
 from our_tools.tools import *
 
 class MainApp(QMainWindow):
+
     def __init__(self, parent=None, *args):
+
         super(MainApp, self).__init__(parent=parent)
-        self.setMinimumSize(1200, 600)
+        self.setMinimumSize(990, 600)
         self.setStyleSheet("background:#212121")
 
-        # boxes #
+	    # --------------------- Boxes ------------------------ #
+
+        # Cuadro de video grande
         self.video = QLabel('', self)
+
+        # Cuadro de video del ROI
         self.roi_video = QLabel('', self)
+
+        # Botón de inicio
         self.start_button = QPushButton('start', self)
         self.start_button.clicked.connect(self.start)
+
+        # Botón de stop
         self.stop_button = QPushButton('stop', self)
         self.stop_button.clicked.connect(self.stop)
 
-        # estilos #
-        self.video.setStyleSheet("background: #ffffff")
-        self.video.setGeometry(10, 10, 640, 480)
-        self.roi_video.setStyleSheet("background: #ffffff")
-        self.roi_video.setGeometry(680, 10, 300, 300)
-        self.start_button.setStyleSheet("background: #ffffff")
-        self.start_button.setGeometry(10, 500, 75, 23)
-        self.roi_video.setGeometry(680, 10, 300, 300)
-        self.stop_button.setStyleSheet("background: #ffffff")
-        self.stop_button.setGeometry(100, 500, 75, 23)
+        # Input de número
+        self.input_area = QLineEdit("5000", self)
+        self.input_area.setPlaceholderText("Área a detectar")
+        self.input_area.returnPressed.connect(self.slider_value)
 
-	# ----------------------FULL VIDEO----------------------- #
+        # Slider
+        self.slider_area = QSlider(self)
+        self.slider_area.setMinimum(100)
+        self.slider_area.setMaximum(10000)
+        self.slider_area.setValue(5000)
+        self.slider_area.valueChanged.connect(self.detection_area)
+
+	    # ------------------- Estilos ----------------------- #
+
+        # Cuadro de video grande
+        self.video.setStyleSheet("background: #ffffff")
+        self.video.setGeometry(10, 50, 640, 480)
+
+        # Cuadro de video del ROI
+        self.roi_video.setStyleSheet("background: #ffffff")
+        self.roi_video.setGeometry(680, 50, 300, 300)
+
+        # Botón de inicio
+        self.start_button.setStyleSheet("background: #ffffff")
+        self.start_button.setGeometry(10, 10, 75, 23)
+
+        # Botón de stop
+        self.stop_button.setStyleSheet("background: #ffffff")
+        self.stop_button.setGeometry(100, 10, 75, 23)
+
+        # Input de número
+        self.input_area.setStyleSheet("background: #ffffff")
+        self.input_area.setGeometry(680, 385, 100, 25)
+
+        # Slider
+        self.slider_area.setOrientation(Qt.Horizontal)
+        self.slider_area.setGeometry(680, 360, 100, 20)
+
+	# --------------------- FULL VIDEO ---------------------- #
 
     def start(self):
         self.FullVideo = Work()
@@ -39,12 +76,21 @@ class MainApp(QMainWindow):
 
     def Imageupd_slot(self, Image):
         self.video.setPixmap(QPixmap.fromImage(Image))
+
     def Imageupd_slot2(self, Image):
         self.roi_video.setPixmap(QPixmap.fromImage(Image))
 
     def stop(self):
         self.video.clear()
         self.FullVideo.stop()
+
+    def detection_area(self, value):
+        self.input_area.setText(str(value))
+        global area
+        area = value
+
+    def slider_value(self, value):
+        self.slider_area.setValue(int(value))
 
 class Work(QThread):
 
@@ -53,35 +99,37 @@ class Work(QThread):
 
     def run(self):
 
+        global area
+        area = 5000
+
         self.hilo = True
 
         cap = cv2.VideoCapture(0)
 
         while self.hilo:
 
+            # Frame ventana grande
+
             ret, frame = cap.read()
             frame = cv2.flip(frame, 1)
             make_rectangle(frame)
             roi = make_roi(frame)
-            color_detection(roi)
+            color_detection(roi, area)
             Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             convertir_QT = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
             pic = convertir_QT.scaled(640, 480, Qt.KeepAspectRatio)
+
+            # Frame ventana chica (pixeles blancos del color)
 
             ret, frame = cap.read()
             frame = cv2.flip(frame, 1)
             roi = make_roi(frame)
             Image_roi = colors_pixels(roi)
             Image_roi = cv2.cvtColor(Image_roi, cv2.COLOR_BGR2RGB)
-            # flip_roi = cv2.flip(Image_roi, 1)
             cvt2QtFormat = QImage(Image_roi.data, Image_roi.shape[1], Image_roi.shape[0], QImage.Format_RGB888)
             pic_roi = cvt2QtFormat.scaled(300, 300, Qt.KeepAspectRatio)
 
-            # Image = colors_pixels(frame)
-            # Image = cv2.cvtColor(Image, cv2.COLOR_BGR2RGB)
-            # flip = cv2.flip(Image, 1)
-            # convertir_QT = QImage(flip.data, flip.shape[1], flip.shape[0], QImage.Format_RGB888)
-            # pic = convertir_QT.scaled(640, 480, Qt.KeepAspectRatio)
+            # Emit frames
 
             if ret:
                 self.Imageupd.emit(pic)
