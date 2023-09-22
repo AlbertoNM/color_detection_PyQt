@@ -31,11 +31,12 @@ class MainApp(QMainWindow):
         # Input de número
         self.input_area = QLineEdit("5000", self)
         self.input_area.setPlaceholderText("Área a detectar")
-        self.input_area.returnPressed.connect(self.slider_value)
+        self.input_area.setMaxLength(5)
+        self.input_area.textChanged.connect(self.slider_value)
 
         # Slider
         self.slider_area = QSlider(self)
-        self.slider_area.setMinimum(100)
+        self.slider_area.setMinimum(0)
         self.slider_area.setMaximum(10000)
         self.slider_area.setValue(5000)
         self.slider_area.valueChanged.connect(self.detection_area)
@@ -89,8 +90,14 @@ class MainApp(QMainWindow):
         global area
         area = value
 
-    def slider_value(self, value):
-        self.slider_area.setValue(int(value))
+    def slider_value(self):
+        try:
+            self.slider_area.setValue(int(self.input_area.text()))
+            global area
+            area = int(self.input_area.text())
+        except:
+            self.input_area.setText(str(1))
+            area = 1
 
 class Work(QThread):
 

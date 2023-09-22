@@ -2,31 +2,33 @@ import cv2
 import numpy as np
 import imutils
 
-cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture(0)
 
-def make_roi(frame):
+# def make_roi(frame):
 
-    roi = frame
-    hn, wn, c = roi.shape
-    x1, x2, y1, y2 = int(wn/3), int((wn/3)*2), int(hn/3)*2-50, hn
-    # cv2.rectangle(roi, (x1, y1), (x2,y2), (0,255,0), 2)
-    roi2=roi[:]
+#     roi = frame
+#     hn, wn, c = roi.shape
+#     x1, x2, y1, y2 = int(wn/3), int((wn/3)*2), int(hn/3)*2-50, hn
+#     # cv2.rectangle(roi, (x1, y1), (x2,y2), (0,255,0), 2)
+#     roi2=roi[:]
 
-    return roi[y1:y2, x1:x2]
+#     return roi[y1:y2, x1:x2]
 
-while True:
+# while True:
 
-    ret, frame = cap.read()
-    roi = make_roi(frame)
+#     ret, frame = cap.read()
+#     roi = make_roi(frame)
 
-    cv2.imshow("Roi", roi)
-    if cv2.waitKey(1) & 0xFF == ord('q'):break
+#     cv2.imshow("Roi", roi)
+#     if cv2.waitKey(1) & 0xFF == ord('q'):break
 
-cap.release()
+# cap.release()
 
 # --------------------------------------------------------------- #
 
-
+cap = cv2.VideoCapture(0)
+ret, frame = cap.read()
+print(type(frame))
 
 # --------------------------------------------------------------- #
 
