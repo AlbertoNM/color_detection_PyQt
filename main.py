@@ -85,6 +85,8 @@ class MainApp(QMainWindow):
         self.video.clear()
         self.FullVideo.stop()
 
+	# ------------------ Slider e input -------------------- #
+
     def detection_area(self, value):
         self.input_area.setText(str(value))
         global area
