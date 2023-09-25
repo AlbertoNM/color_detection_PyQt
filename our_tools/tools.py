@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 import imutils
 from our_tools.colors import colores
 
@@ -37,6 +38,17 @@ def contours(face):
     cnts = cv2.findContours(face, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     return imutils.grab_contours(cnts)
 
+def color_range(frame: tuple, color: str) -> tuple:
+
+    mask_h = cv2.inRange(frame, colores[color]["bajo"]["h"], colores[color]["alto"]["h"])
+    mask_s = cv2.inRange(frame, colores[color]["bajo"]["s"], colores[color]["alto"]["s"])
+    mask_v = cv2.inRange(frame, colores[color]["bajo"]["v"], colores[color]["alto"]["v"])
+
+    mask = cv2.add(mask_h, mask_s)
+    mask = cv2.add(mask, mask_v)
+
+    return mask
+
 def color_detection(frame:tuple, area:int) -> None:
 
     """
@@ -48,12 +60,12 @@ def color_detection(frame:tuple, area:int) -> None:
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    red_mask = cv2.inRange(hsv, colores["rojo"]["bajo"], colores["rojo"]["alto"])
-    orange_mask = cv2.inRange(hsv, colores["naranja"]["bajo"], colores["naranja"]["alto"])
-    yellow_mask = cv2.inRange(hsv, colores["amarillo"]["bajo"], colores["amarillo"]["alto"])
-    green_mask = cv2.inRange(hsv, colores["verde"]["bajo"], colores["verde"]["alto"])
-    blue_mask = cv2.inRange(hsv, colores["azul"]["bajo"], colores["azul"]["alto"])
-    purple_mask = cv2.inRange(hsv, colores["morado"]["bajo"], colores["morado"]["alto"])
+    red_mask = color_range(hsv, "rojo")
+    orange_mask = color_range(hsv, "naranja")
+    yellow_mask = color_range(hsv, "amarillo")
+    green_mask = color_range(hsv, "verde")
+    blue_mask = color_range(hsv, "azul")
+    purple_mask = color_range(hsv, "morado")
 
     cntsR = contours(red_mask)
     cntsN = contours(orange_mask)
@@ -84,17 +96,16 @@ def make_rectangle(frame):
     x1, x2, y1, y2 = int(wn/4), int((wn/4)*3), int(hn/4), int((hn/4)*3)
     cv2.rectangle(rectangle, (x1-5, y1-5), (x2+5,y2+5), (0,255,0), 2)
 
-
 def colors_pixels(frame):
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    red_mask = cv2.inRange(hsv, colores["rojo"]["bajo"], colores["rojo"]["alto"])
-    orange_mask = cv2.inRange(hsv, colores["naranja"]["bajo"], colores["naranja"]["alto"])
-    yellow_mask = cv2.inRange(hsv, colores["amarillo"]["bajo"], colores["amarillo"]["alto"])
-    green_mask = cv2.inRange(hsv, colores["verde"]["bajo"], colores["verde"]["alto"])
-    blue_mask = cv2.inRange(hsv, colores["azul"]["bajo"], colores["azul"]["alto"])
-    purple_mask = cv2.inRange(hsv, colores["morado"]["bajo"], colores["morado"]["alto"])
+    red_mask = color_range(hsv, "rojo")
+    orange_mask = color_range(hsv, "naranja")
+    yellow_mask = color_range(hsv, "amarillo")
+    green_mask = color_range(hsv, "verde")
+    blue_mask = color_range(hsv, "azul")
+    purple_mask = color_range(hsv, "morado")
 
     colors_frame = cv2.add(red_mask, orange_mask)
     colors_frame = cv2.add(colors_frame, yellow_mask)
@@ -102,4 +113,24 @@ def colors_pixels(frame):
     colors_frame = cv2.add(colors_frame, blue_mask)
     colors_frame = cv2.add(colors_frame, purple_mask)
 
-    return colors_frame
+    color = cv2.bitwise_and(frame, frame, mask= colors_frame)
+
+    return color
+
+def prueba_pixeles(frame, low_H, low_S, low_V, up_H, up_S, up_V):
+
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(hsv, np.array([low_H, low_S, low_V]), np.array([up_H, up_S, up_V]))
+    color = cv2.bitwise_and(frame, frame, mask= mask)
+
+    return color
+
+
+def prueba_color(frame, area, low_H, low_S, low_V, up_H, up_S, up_V):
+
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(hsv, np.array([low_H, low_S, low_V]), np.array([up_H, up_S, up_V]))
+
+    contour = contours(mask)
+
+    color_area(contour, frame, "color", area, colores["rojo"]["referencia"])
