@@ -4,6 +4,9 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from our_tools.tools import *
 
+global low_H, low_S, low_V, up_H, up_S, up_V
+low_H, low_S, low_V, up_H, up_S, up_V = 0,0,0,0,0,0
+
 class MainApp(QMainWindow):
 
     def __init__(self, parent=None, *args):
@@ -102,6 +105,10 @@ class MainApp(QMainWindow):
         self.spinMax_V.setRange(0, 255)
         self.spinMax_V.valueChanged.connect(self.sliderMax_V_value)
 
+        #* Label referencia
+        self.cuadroMin_color = QLabel("", self)
+        self.cuadroMax_color = QLabel("", self)
+
 	    #! ------------------- Estilos ----------------------- !#
 
         #* Cuadro de video grande
@@ -188,6 +195,12 @@ class MainApp(QMainWindow):
         self.spinMax_V.setStyleSheet("background: #ffffff")
         self.spinMax_V.setGeometry(1180, 280, 45, 20)
 
+        #* Cuadro color
+        self.cuadroMin_color.setStyleSheet("background: hsv(0,0,0)")
+        self.cuadroMin_color.setGeometry(1240, 50, 50, 50)
+        self.cuadroMax_color.setStyleSheet("background: hsv(0,0,0)")
+        self.cuadroMax_color.setGeometry(1240, 200, 50, 50)
+
 	#! --------------------- FULL VIDEO ---------------------- !#
 
     def start(self):
@@ -226,65 +239,77 @@ class MainApp(QMainWindow):
 
     def sliderMin_H_value(self, value):
         self.sliderMin_H.setValue(value)
-        global low_H
+        global low_H, low_S, low_V
         low_H = value
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({value*2},{low_S},{low_V})")
 
     def sliderMin_S_value(self, value):
         self.sliderMin_S.setValue(value)
-        global low_S
+        global low_H, low_S, low_V
         low_S = value
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H},{low_S},{low_V})")
 
     def sliderMin_V_value(self, value):
         self.sliderMin_V.setValue(value)
-        global low_V
+        global low_H, low_S, low_V
         low_V = value
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H},{low_S},{low_V})")
 
     def spinMin_H_value(self, value):
         self.spinMin_H.setValue(value)
-        global low_H
+        global low_H, low_S, low_V
         low_H = value
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({value*2},{low_S},{low_V})")
 
     def spinMin_S_value(self, value):
         self.spinMin_S.setValue(value)
-        global low_S
+        global low_H, low_S, low_V
         low_S = value
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H},{low_S},{low_V})")
 
     def spinMin_V_value(self, value):
         self.spinMin_V.setValue(value)
-        global low_V
+        global low_H, low_S, low_V
         low_V = value
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H},{low_S},{low_V})")
 
 	#! ----------------- Sliders HSV max ------------------- !#
 
     def sliderMax_H_value(self, value):
         self.sliderMax_H.setValue(value)
-        global up_H
+        global up_H, up_S, up_V
         up_H = value
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({value*2},{up_S},{up_V})")
 
     def sliderMax_S_value(self, value):
         self.sliderMax_S.setValue(value)
-        global up_S
+        global up_H, up_S, up_V
         up_S = value
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H},{up_S},{up_V})")
 
     def sliderMax_V_value(self, value):
         self.sliderMax_V.setValue(value)
-        global up_V
+        global up_H, up_S, up_V
         up_V = value
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H},{up_S},{up_V})")
 
     def spinMax_H_value(self, value):
         self.spinMax_H.setValue(value)
-        global up_H
+        global up_H, up_S, up_V
         up_H = value
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({value*2},{up_S},{up_V})")
 
     def spinMax_S_value(self, value):
         self.spinMax_S.setValue(value)
-        global up_S
+        global up_H, up_S, up_V
         up_S = value
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H},{up_S},{up_V})")
 
     def spinMax_V_value(self, value):
         self.spinMax_V.setValue(value)
-        global up_V
+        global up_H, up_S, up_V
         up_V = value
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H},{up_S},{up_V})")
 
 class Work(QThread):
 
@@ -299,13 +324,7 @@ class Work(QThread):
 
         # Variables globales de HSV
         global low_H, low_S, low_V, up_H, up_S, up_V
-        low_H = 0
-        low_S = 0
-        low_V = 0
-
-        up_H = 0
-        up_S = 0
-        up_V = 0
+        low_H, low_S, low_V, up_H, up_S, up_V = 0,0,0,0,0,0
 
         self.hilo = True
 
