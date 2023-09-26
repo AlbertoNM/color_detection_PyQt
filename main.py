@@ -32,7 +32,7 @@ class MainApp(QMainWindow):
 
         #* Botón de stop
         self.stop_button = QPushButton('stop', self)
-        self.stop_button.clicked.connect(self.start_roi)
+        self.stop_button.clicked.connect(self.stop)
 
         #* Input de número
         self.input_area = QLineEdit("5000", self)
@@ -228,17 +228,17 @@ class MainApp(QMainWindow):
         self.Work.start()
         self.Work.Imageupd.connect(self.Imageupd_slot)
 
-    def start_roi(self):
-        self.Work = Work(None, 2)
-        self.Work.start()
-        self.Work.Imageupd.connect(self.Imageupd_slot)
+    # def start_roi(self):
+    #     self.Work = Work(None, 2)
+    #     self.Work.start()
+    #     self.Work.Imageupd.connect(self.Imageupd_slot)
 
     def Imageupd_slot(self, Image):
-        index = self.sender().index
-        if index == 1:
-            self.video.setPixmap(QPixmap.fromImage(Image))
-        elif index == 2:
-            self.roi_video.setPixmap(QPixmap.fromImage(Image))
+        global low_H, low_S, low_V, up_H, up_S, up_V
+        self.video.setPixmap(QPixmap.fromImage(Image))
+        frame = prueba_pixeles(Image, low_H, low_S, low_V, up_H, up_S, up_V)
+        Image_roi = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        self.roi_video.setPixmap(QPixmap.fromImage(Image_roi))
 
     # def Imageupd_slot2(self, Image):
     #     self.roi_video.setPixmap(QPixmap.fromImage(Image))
@@ -391,16 +391,16 @@ class Work(QThread):
 
                 ret, frame = cap.read()
                 frame = cv2.flip(frame, 1)
-                make_rectangle(frame)
-                roi = make_roi(frame)
-                # color_detection(roi, area)
-                prueba_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
-                Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                convertir_QT = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
-                pic = convertir_QT.scaled(640, 480, Qt.KeepAspectRatio)
+                # make_rectangle(frame)
+                # roi = make_roi(frame)
+                # # color_detection(roi, area)
+                # prueba_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
+                # Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                # convertir_QT = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
+                # pic = convertir_QT.scaled(640, 480, Qt.KeepAspectRatio)
 
                 if ret:
-                    self.Imageupd.emit(pic)
+                    self.Imageupd.emit(frame)
 
         elif self.index == 2:
 
