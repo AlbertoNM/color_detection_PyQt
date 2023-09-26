@@ -4,7 +4,6 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from our_tools.tools import *
 
-global low_H, low_S, low_V, up_H, up_S, up_V
 low_H, low_S, low_V, up_H, up_S, up_V = 0,0,0,0,0,0
 
 class MainApp(QMainWindow):
@@ -52,10 +51,10 @@ class MainApp(QMainWindow):
         self.labelMin_H = QLabel("H", self)
         self.sliderMin_H = QSlider(self)
         self.sliderMin_H.setMinimum(0)
-        self.sliderMin_H.setMaximum(180)
+        self.sliderMin_H.setMaximum(179)
         self.sliderMin_H.valueChanged.connect(self.spinMin_H_value)
         self.spinMin_H = QSpinBox(self)
-        self.spinMin_H.setRange(0, 180)
+        self.spinMin_H.setRange(0, 179)
         self.spinMin_H.valueChanged.connect(self.sliderMin_H_value)
 
         self.labelMin_S = QLabel("S", self)
@@ -81,10 +80,10 @@ class MainApp(QMainWindow):
         self.labelMax_H = QLabel("H", self)
         self.sliderMax_H = QSlider(self)
         self.sliderMax_H.setMinimum(0)
-        self.sliderMax_H.setMaximum(180)
+        self.sliderMax_H.setMaximum(179)
         self.sliderMax_H.valueChanged.connect(self.spinMax_H_value)
         self.spinMax_H = QSpinBox(self)
-        self.spinMax_H.setRange(0, 180)
+        self.spinMax_H.setRange(0, 179)
         self.spinMax_H.valueChanged.connect(self.sliderMax_H_value)
 
         self.labelMax_S = QLabel("S", self)
@@ -112,11 +111,11 @@ class MainApp(QMainWindow):
 	    #! ------------------- Estilos ----------------------- !#
 
         #* Cuadro de video grande
-        self.video.setStyleSheet("background: #ffffff")
+        self.video.setStyleSheet("background: #000000")
         self.video.setGeometry(10, 50, 640, 480)
 
         #* Cuadro de video del ROI
-        self.roi_video.setStyleSheet("background: #ffffff")
+        self.roi_video.setStyleSheet("background: #000000")
         self.roi_video.setGeometry(680, 50, 300, 300)
 
         #* Botón de inicio
@@ -147,6 +146,7 @@ class MainApp(QMainWindow):
         self.labelMin_H.setGeometry(1000, 50, 20, 20)
 
         self.sliderMin_H.setOrientation(Qt.Horizontal)
+        self.sliderMin_H.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 0, 0, 255), stop:0.166 rgba(255, 255, 0, 255), stop:0.333 rgba(0, 255, 0, 255), stop:0.5 rgba(0, 255, 255, 255), stop:0.666 rgba(0, 0, 255, 255), stop:0.833 rgba(255, 0, 255, 255), stop:1 rgba(255, 0, 0, 255));")
         self.sliderMin_H.setGeometry(1020, 50, 140, 20)
         self.spinMin_H.setStyleSheet("background: #ffffff")
         self.spinMin_H.setGeometry(1180, 50, 45, 20)
@@ -155,6 +155,7 @@ class MainApp(QMainWindow):
         self.labelMin_S.setGeometry(1000, 90, 20, 20)
 
         self.sliderMin_S.setOrientation(Qt.Horizontal)
+        self.sliderMin_S.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv(0,0,0));")
         self.sliderMin_S.setGeometry(1020, 90, 140, 20)
         self.spinMin_S.setStyleSheet("background: #ffffff")
         self.spinMin_S.setGeometry(1180, 90, 45, 20)
@@ -163,6 +164,7 @@ class MainApp(QMainWindow):
         self.labelMin_V.setGeometry(1000, 130, 20, 20)
 
         self.sliderMin_V.setOrientation(Qt.Horizontal)
+        self.sliderMin_V.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv(0,0,0));")
         self.sliderMin_V.setGeometry(1020, 130, 140, 20)
         self.spinMin_V.setStyleSheet("background: #ffffff")
         self.spinMin_V.setGeometry(1180, 130, 45, 20)
@@ -175,6 +177,7 @@ class MainApp(QMainWindow):
         self.labelMax_H.setGeometry(1000, 200, 20, 20)
 
         self.sliderMax_H.setOrientation(Qt.Horizontal)
+        self.sliderMax_H.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 0, 0, 255), stop:0.166 rgba(255, 255, 0, 255), stop:0.333 rgba(0, 255, 0, 255), stop:0.5 rgba(0, 255, 255, 255), stop:0.666 rgba(0, 0, 255, 255), stop:0.833 rgba(255, 0, 255, 255), stop:1 rgba(255, 0, 0, 255));")
         self.sliderMax_H.setGeometry(1020, 200, 140, 20)
         self.spinMax_H.setStyleSheet("background: #ffffff")
         self.spinMax_H.setGeometry(1180, 200, 45, 20)
@@ -183,6 +186,7 @@ class MainApp(QMainWindow):
         self.labelMax_S.setGeometry(1000, 240, 20, 20)
 
         self.sliderMax_S.setOrientation(Qt.Horizontal)
+        self.sliderMax_S.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv(0,0,0));")
         self.sliderMax_S.setGeometry(1020, 240, 140, 20)
         self.spinMax_S.setStyleSheet("background: #ffffff")
         self.spinMax_S.setGeometry(1180, 240, 45, 20)
@@ -191,6 +195,7 @@ class MainApp(QMainWindow):
         self.labelMax_V.setGeometry(1000, 280, 20, 20)
 
         self.sliderMax_V.setOrientation(Qt.Horizontal)
+        self.sliderMax_V.setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv(0,0,0));")
         self.sliderMax_V.setGeometry(1020, 280, 140, 20)
         self.spinMax_V.setStyleSheet("background: #ffffff")
         self.spinMax_V.setGeometry(1180, 280, 45, 20)
@@ -241,37 +246,49 @@ class MainApp(QMainWindow):
         self.sliderMin_H.setValue(value)
         global low_H, low_S, low_V
         low_H = value
-        self.cuadroMin_color.setStyleSheet(f"background: hsv({value*2},{low_S},{low_V})")
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H*2},{low_S},{low_V})")
+        self.sliderMin_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({low_H*2},{low_S},{low_V}));")
+        self.sliderMin_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({low_H*2},{low_S},{low_V}));")
 
     def sliderMin_S_value(self, value):
         self.sliderMin_S.setValue(value)
         global low_H, low_S, low_V
         low_S = value
-        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H},{low_S},{low_V})")
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H*2},{low_S},{low_V})")
+        self.sliderMin_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({low_H*2},{low_S},{low_V}));")
+        self.sliderMin_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({low_H*2},{low_S},{low_V}));")
 
     def sliderMin_V_value(self, value):
         self.sliderMin_V.setValue(value)
         global low_H, low_S, low_V
         low_V = value
-        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H},{low_S},{low_V})")
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H*2},{low_S},{low_V})")
+        self.sliderMin_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({low_H*2},{low_S},{low_V}));")
+        self.sliderMin_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({low_H*2},{low_S},{low_V}));")
 
     def spinMin_H_value(self, value):
         self.spinMin_H.setValue(value)
         global low_H, low_S, low_V
         low_H = value
-        self.cuadroMin_color.setStyleSheet(f"background: hsv({value*2},{low_S},{low_V})")
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H*2},{low_S},{low_V})")
+        self.sliderMin_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({low_H*2},{low_S},{low_V}));")
+        self.sliderMin_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({low_H*2},{low_S},{low_V}));")
 
     def spinMin_S_value(self, value):
         self.spinMin_S.setValue(value)
         global low_H, low_S, low_V
         low_S = value
-        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H},{low_S},{low_V})")
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H*2},{low_S},{low_V})")
+        self.sliderMin_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({low_H*2},{low_S},{low_V}));")
+        self.sliderMin_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({low_H*2},{low_S},{low_V}));")
 
     def spinMin_V_value(self, value):
         self.spinMin_V.setValue(value)
         global low_H, low_S, low_V
         low_V = value
-        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H},{low_S},{low_V})")
+        self.cuadroMin_color.setStyleSheet(f"background: hsv({low_H*2},{low_S},{low_V})")
+        self.sliderMin_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({low_H*2},{low_S},{low_V}));")
+        self.sliderMin_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({low_H*2},{low_S},{low_V}));")
 
 	#! ----------------- Sliders HSV max ------------------- !#
 
@@ -279,37 +296,49 @@ class MainApp(QMainWindow):
         self.sliderMax_H.setValue(value)
         global up_H, up_S, up_V
         up_H = value
-        self.cuadroMax_color.setStyleSheet(f"background: hsv({value*2},{up_S},{up_V})")
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H*2},{up_S},{up_V})")
+        self.sliderMax_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({up_H*2},{up_V},{up_S}));")
+        self.sliderMax_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({up_H*2},{up_V},{up_S}));")
 
     def sliderMax_S_value(self, value):
         self.sliderMax_S.setValue(value)
         global up_H, up_S, up_V
         up_S = value
-        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H},{up_S},{up_V})")
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H*2},{up_S},{up_V})")
+        self.sliderMax_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({up_H*2},{up_S},{up_V}));")
+        self.sliderMax_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({up_H*2},{up_S},{up_V}));")
 
     def sliderMax_V_value(self, value):
         self.sliderMax_V.setValue(value)
         global up_H, up_S, up_V
         up_V = value
-        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H},{up_S},{up_V})")
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H*2},{up_S},{up_V})")
+        self.sliderMax_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({up_H*2},{up_S},{up_V}));")
+        self.sliderMax_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({up_H*2},{up_S},{up_V}));")
 
     def spinMax_H_value(self, value):
         self.spinMax_H.setValue(value)
         global up_H, up_S, up_V
         up_H = value
-        self.cuadroMax_color.setStyleSheet(f"background: hsv({value*2},{up_S},{up_V})")
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H*2},{up_S},{up_V})")
+        self.sliderMax_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({up_H*2},{up_S},{up_V}));")
+        self.sliderMax_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({up_H*2},{up_S},{up_V}));")
 
     def spinMax_S_value(self, value):
         self.spinMax_S.setValue(value)
         global up_H, up_S, up_V
         up_S = value
-        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H},{up_S},{up_V})")
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H*2},{up_S},{up_V})")
+        self.sliderMax_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({up_H*2},{up_S},{up_V}));")
+        self.sliderMax_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({up_H*2},{up_S},{up_V}));")
 
     def spinMax_V_value(self, value):
         self.spinMax_V.setValue(value)
         global up_H, up_S, up_V
         up_V = value
-        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H},{up_S},{up_V})")
+        self.cuadroMax_color.setStyleSheet(f"background: hsv({up_H*2},{up_S},{up_V})")
+        self.sliderMax_S.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,0,255), stop:1 hsv({up_H*2},{up_S},{up_V}));")
+        self.sliderMax_V.setStyleSheet(f"background-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 hsv(0,255,0), stop:1 hsv({up_H*2},{up_S},{up_V}));")
 
 class Work(QThread):
 
@@ -324,7 +353,6 @@ class Work(QThread):
 
         # Variables globales de HSV
         global low_H, low_S, low_V, up_H, up_S, up_V
-        low_H, low_S, low_V, up_H, up_S, up_V = 0,0,0,0,0,0
 
         self.hilo = True
 
