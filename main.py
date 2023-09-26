@@ -12,6 +12,7 @@ class MainApp(QMainWindow):
     def __init__(self, parent=None, *args):
 
         super(MainApp, self).__init__(parent=parent)
+
         self.setMinimumSize(1300, 600)
         self.setStyleSheet("background:#212121")
 
@@ -221,10 +222,10 @@ class MainApp(QMainWindow):
 	#! --------------------- FULL VIDEO ---------------------- !#
 
     def start(self):
-        self.FullVideo = Work()
-        self.FullVideo.Imageupd.connect(self.Imageupd_slot)
-        self.FullVideo.Imageupd_roi.connect(self.Imageupd_slot2)
-        self.FullVideo.start()
+        self.Work = Work()
+        self.Work.Imageupd.connect(self.Imageupd_slot)
+        self.Work.Imageupd_roi.connect(self.Imageupd_slot2)
+        self.Work.start()
 
     def Imageupd_slot(self, Image):
         self.video.setPixmap(QPixmap.fromImage(Image))
@@ -234,7 +235,8 @@ class MainApp(QMainWindow):
 
     def stop(self):
         self.video.clear()
-        self.FullVideo.stop()
+        self.roi_video.clear()
+        self.Work.stop()
 
 	#! ------------------ Slider e input -------------------- !#
 
