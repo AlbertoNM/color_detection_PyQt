@@ -1,3 +1,5 @@
+import typing
+from PyQt5.QtCore import QObject
 import cv2
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -30,7 +32,7 @@ class MainApp(QMainWindow):
 
         #* Botón de stop
         self.stop_button = QPushButton('stop', self)
-        self.stop_button.clicked.connect(self.stop)
+        self.stop_button.clicked.connect(self.start_roi)
 
         #* Input de número
         self.input_area = QLineEdit("5000", self)
@@ -222,16 +224,24 @@ class MainApp(QMainWindow):
 	#! --------------------- FULL VIDEO ---------------------- !#
 
     def start(self):
-        self.Work = Work()
-        self.Work.Imageupd.connect(self.Imageupd_slot)
-        self.Work.Imageupd_roi.connect(self.Imageupd_slot2)
+        self.Work = Work(None, 1)
         self.Work.start()
+        self.Work.Imageupd.connect(self.Imageupd_slot)
+
+    def start_roi(self):
+        self.Work = Work(None, 2)
+        self.Work.start()
+        self.Work.Imageupd.connect(self.Imageupd_slot)
 
     def Imageupd_slot(self, Image):
-        self.video.setPixmap(QPixmap.fromImage(Image))
+        index = self.sender().index
+        if index == 1:
+            self.video.setPixmap(QPixmap.fromImage(Image))
+        elif index == 2:
+            self.roi_video.setPixmap(QPixmap.fromImage(Image))
 
-    def Imageupd_slot2(self, Image):
-        self.roi_video.setPixmap(QPixmap.fromImage(Image))
+    # def Imageupd_slot2(self, Image):
+    #     self.roi_video.setPixmap(QPixmap.fromImage(Image))
 
     def stop(self):
         self.video.clear()
@@ -357,7 +367,11 @@ class MainApp(QMainWindow):
 class Work(QThread):
 
     Imageupd = pyqtSignal(QImage)
-    Imageupd_roi = pyqtSignal(QImage)
+
+    def __init__(self, parent = None, index = 0):
+        super(Work, self).__init__(parent)
+        self.index = index
+        self.hilo = True
 
     def run(self):
 
@@ -367,42 +381,46 @@ class Work(QThread):
         # Variables globales de HSV
         global low_H, low_S, low_V, up_H, up_S, up_V
 
-        self.hilo = True
-
         cap = cv2.VideoCapture(0)
 
-        while self.hilo:
+        if self.index == 1:
 
-            # Frame ventana grande
+            while self.hilo:
 
-            ret, frame = cap.read()
-            frame = cv2.flip(frame, 1)
-            make_rectangle(frame)
-            roi = make_roi(frame)
-            # color_detection(roi, area)
-            prueba_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
+                # Frame ventana grande
 
-            Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            convertir_QT = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
-            pic = convertir_QT.scaled(640, 480, Qt.KeepAspectRatio)
+                ret, frame = cap.read()
+                frame = cv2.flip(frame, 1)
+                make_rectangle(frame)
+                roi = make_roi(frame)
+                # color_detection(roi, area)
+                prueba_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
+                Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                convertir_QT = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
+                pic = convertir_QT.scaled(640, 480, Qt.KeepAspectRatio)
 
-            # Frame ventana chica (pixeles del rango de color)
+                if ret:
+                    self.Imageupd.emit(pic)
 
-            ret, frame = cap.read()
-            frame = cv2.flip(frame, 1)
-            roi = make_roi(frame)
-            # Image_roi = colors_pixels(roi)
-            Image_roi = prueba_pixeles(roi, low_H, low_S, low_V, up_H, up_S, up_V)
+        elif self.index == 2:
 
-            Image_roi = cv2.cvtColor(Image_roi, cv2.COLOR_BGR2RGB)
-            cvt2QtFormat = QImage(Image_roi.data, Image_roi.shape[1], Image_roi.shape[0], QImage.Format_RGB888)
-            pic_roi = cvt2QtFormat.scaled(300, 300, Qt.KeepAspectRatio)
+            while self.hilo:
 
-            # Emit frames
+            	# Frame ventana chica (pixeles del rango de color)
+                ret, frame = cap.read()
+                frame = cv2.flip(frame, 1)
+                roi = make_roi(frame)
+                # Image_roi = colors_pixels(roi)
+                Image_roi = prueba_pixeles(roi, low_H, low_S, low_V, up_H, up_S, up_V)
+                Image_roi = cv2.cvtColor(Image_roi, cv2.COLOR_BGR2RGB)
+                cvt2QtFormat = QImage(Image_roi.data, Image_roi.shape[1], Image_roi.shape[0], QImage.Format_RGB888)
+                pic_roi = cvt2QtFormat.scaled(300, 300, Qt.KeepAspectRatio)
 
-            if ret:
-                self.Imageupd.emit(pic)
-                self.Imageupd_roi.emit(pic_roi)
+                if ret:
+                    self.Imageupd.emit(pic_roi)
+
+        elif self.index == 3:
+            pass
 
     def stop(self):
         self.hilo = False
