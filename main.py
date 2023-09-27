@@ -7,7 +7,7 @@ from PyQt5.QtGui import *
 from our_tools.tools import *
 
 area = 5000
-low_H, low_S, low_V, up_H, up_S, up_V = 0,0,0,0,0,0
+low_H, low_S, low_V, up_H, up_S, up_V = 0,0,0,179,255,255
 
 class MainApp(QMainWindow):
 
@@ -91,27 +91,33 @@ class MainApp(QMainWindow):
         self.sliderMax_H = QSlider(self)
         self.sliderMax_H.setMinimum(0)
         self.sliderMax_H.setMaximum(179)
+        self.sliderMax_H.setValue(179)
         self.sliderMax_H.valueChanged.connect(self.spinMax_H_value)
         self.spinMax_H = QSpinBox(self)
         self.spinMax_H.setRange(0, 179)
+        self.spinMax_H.setValue(179)
         self.spinMax_H.valueChanged.connect(self.sliderMax_H_value)
 
         self.labelMax_S = QLabel("S", self)
         self.sliderMax_S = QSlider(self)
         self.sliderMax_S.setMinimum(0)
         self.sliderMax_S.setMaximum(255)
+        self.sliderMax_S.setValue(255)
         self.sliderMax_S.valueChanged.connect(self.spinMax_S_value)
         self.spinMax_S = QSpinBox(self)
         self.spinMax_S.setRange(0, 255)
+        self.spinMax_S.setValue(255)
         self.spinMax_S.valueChanged.connect(self.sliderMax_S_value)
 
         self.labelMax_V = QLabel("V", self)
         self.sliderMax_V = QSlider(self)
         self.sliderMax_V.setMinimum(0)
         self.sliderMax_V.setMaximum(255)
+        self.sliderMax_V.setValue(255)
         self.sliderMax_V.valueChanged.connect(self.spinMax_V_value)
         self.spinMax_V = QSpinBox(self)
         self.spinMax_V.setRange(0, 255)
+        self.spinMax_V.setValue(255)
         self.spinMax_V.valueChanged.connect(self.sliderMax_V_value)
 
         #* Label referencia
