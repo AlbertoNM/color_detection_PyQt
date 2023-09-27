@@ -405,7 +405,7 @@ class Work(QThread):
             pic_roi = cvt2QtFormat.scaled(300, 300, Qt.KeepAspectRatio)
 
             if ret:
-                self.Imageupd.emit(frame)
+                self.Imageupd.emit(pic)
                 self.Imageupd_roi.emit(pic_roi)
 
     def stop(self):
