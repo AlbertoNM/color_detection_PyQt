@@ -244,9 +244,12 @@ class MainApp(QMainWindow):
     #     self.roi_video.setPixmap(QPixmap.fromImage(Image))
 
     def stop(self):
-        self.video.clear()
-        self.roi_video.clear()
-        self.Work.stop()
+        try:
+            self.video.clear()
+            self.roi_video.clear()
+            self.Work.stop()
+        except:
+            pass
 
 	#! ------------------ Slider e input -------------------- !#
 
