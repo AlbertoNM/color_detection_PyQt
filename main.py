@@ -56,6 +56,7 @@ class MainApp(QMainWindow):
 
         #* Type button
         self.type_button = QPushButton("Escrito",self)
+        self.type_button.clicked.connect(self.start_name)
 
         #* Sliders HSV min
         self.labelMin_HSV = QLabel("HSV min", self)
@@ -246,26 +247,26 @@ class MainApp(QMainWindow):
         try:
             self.video.clear()
             self.roi_video.clear()
-            self.Work_default.stop()
+            self.Work_default.terminate()
         except:
             pass
 
 	#! --------------------- HSV VIDEO --------------------- !#
 
     def start_HSV(self):
+
+        self.video.clear()
+        self.roi_video.clear()
+
         try:
-
-            self.video.clear()
-            self.roi_video.clear()
-            self.Work_default.stop()
-            self.Work_HSV = Work_HSV()
-            self.Work_HSV.start()
-            self.Work_HSV.Imageupd.connect(self.Imageupd_slot_HSV)
-            self.Work_HSV.Imageupd_roi.connect(self.Imageupd_slot2_HSV)
-
+            self.Work_default.terminate()
         except:
-            pass
+            self.Work_name.terminate()
 
+        self.Work_HSV = Work_HSV()
+        self.Work_HSV.start()
+        self.Work_HSV.Imageupd.connect(self.Imageupd_slot_HSV)
+        self.Work_HSV.Imageupd_roi.connect(self.Imageupd_slot2_HSV)
 
     def Imageupd_slot_HSV(self, Image):
         self.video.setPixmap(QPixmap.fromImage(Image))
@@ -277,13 +278,21 @@ class MainApp(QMainWindow):
         try:
             self.video.clear()
             self.roi_video.clear()
-            self.Work_HSV.stop()
+            self.Work_HSV.terminate()
         except:
             pass
 
 	#! -------------------- Name VIDEO --------------------- !#
 
     def start_name(self):
+        self.video.clear()
+        self.roi_video.clear()
+
+        try:
+            self.Work_default.terminate()
+        except:
+            self.Work_HSV.terminate()
+
         self.Work_name = Work_name()
         self.Work_name.start()
         self.Work_name.Imageupd.connect(self.Imageupd_slot_name)
@@ -299,7 +308,7 @@ class MainApp(QMainWindow):
         try:
             self.video.clear()
             self.roi_video.clear()
-            self.Work_name.stop()
+            self.Work_name.terminate()
         except:
             pass
 
@@ -470,7 +479,7 @@ class Work_default(QThread):
 
     def stop(self):
         self.hilo = False
-        self.quit()
+        self.stop()
 
 class Work_HSV(QThread):
 
@@ -501,7 +510,7 @@ class Work_HSV(QThread):
             make_rectangle(frame)
             roi = make_roi(frame)
             # color_detection(roi, area)
-            prueba_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
+            HSV_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
             Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             convertir_QT = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
             pic = convertir_QT.scaled(640, 480, Qt.KeepAspectRatio)
@@ -512,7 +521,7 @@ class Work_HSV(QThread):
             frame = cv2.flip(frame, 1)
             roi = make_roi(frame)
             # Image_roi = colors_pixels(roi)
-            Image_roi = prueba_pixeles(roi, low_H, low_S, low_V, up_H, up_S, up_V)
+            Image_roi = HSV_pixeles(roi, low_H, low_S, low_V, up_H, up_S, up_V)
             Image_roi = cv2.cvtColor(Image_roi, cv2.COLOR_BGR2RGB)
             cvt2QtFormat = QImage(Image_roi.data, Image_roi.shape[1], Image_roi.shape[0], QImage.Format_RGB888)
             pic_roi = cvt2QtFormat.scaled(300, 300, Qt.KeepAspectRatio)
@@ -523,7 +532,7 @@ class Work_HSV(QThread):
 
     def stop(self):
         self.hilo = False
-        self.quit()
+        self.stop()
 
 class Work_name(QThread):
 
@@ -554,7 +563,7 @@ class Work_name(QThread):
             make_rectangle(frame)
             roi = make_roi(frame)
             # color_detection(roi, area)
-            prueba_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
+            name_color(roi, area, "rojo")
             Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             convertir_QT = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
             pic = convertir_QT.scaled(640, 480, Qt.KeepAspectRatio)
@@ -565,7 +574,7 @@ class Work_name(QThread):
             frame = cv2.flip(frame, 1)
             roi = make_roi(frame)
             # Image_roi = colors_pixels(roi)
-            Image_roi = prueba_pixeles(roi, low_H, low_S, low_V, up_H, up_S, up_V)
+            Image_roi = name_pixeles(roi, "rojo")
             Image_roi = cv2.cvtColor(Image_roi, cv2.COLOR_BGR2RGB)
             cvt2QtFormat = QImage(Image_roi.data, Image_roi.shape[1], Image_roi.shape[0], QImage.Format_RGB888)
             pic_roi = cvt2QtFormat.scaled(300, 300, Qt.KeepAspectRatio)
@@ -576,7 +585,7 @@ class Work_name(QThread):
 
     def stop(self):
         self.hilo = False
-        self.quit()
+        self.stop()
 
 if __name__ == "__main__":
     app = QApplication([])
