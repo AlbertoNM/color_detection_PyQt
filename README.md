@@ -12,7 +12,7 @@ Creating an interface for color detection
 
 ## Ambiente virtual
 
-Si ya tiene anaconda solo necesitará un ambiente con las librerías que se mostraron con anterioridad; de no ser así, puede iniciarlizar un ambiente virtual desde la terminal:
+Si ya tiene anaconda solo necesitará un ambiente con las librerías que se mostraron con anterioridad; de no ser así, puede inicializar un ambiente virtual desde la terminal:
 
 ```Shell
 python -m venv venv
@@ -42,4 +42,3 @@ Una vez instaladas las librerías, podrá iniciar la aplicación corriendo el ar
 ```Shell
 python main.py
 ```
-
