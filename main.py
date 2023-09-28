@@ -8,6 +8,7 @@ from our_tools.tools import *
 
 area = 5000
 low_H, low_S, low_V, up_H, up_S, up_V = 0,0,0,179,255,255
+color_name = "rojo"
 
 class MainApp(QMainWindow):
 
@@ -53,10 +54,18 @@ class MainApp(QMainWindow):
 
         #* Name button
         self.name_button = QPushButton("Nombre",self)
+        self.name_button.clicked.connect(self.start_name)
 
         #* Type button
         self.type_button = QPushButton("Escrito",self)
         self.type_button.clicked.connect(self.start_name)
+
+        #* Type input
+        self.type_input = QLineEdit(self)
+        self.type_input.returnPressed.connect(self.give_name)
+
+        #* Label color name
+        self.label_color_output = QLabel("", self)
 
         #* Sliders HSV min
         self.labelMin_HSV = QLabel("HSV min", self)
@@ -163,6 +172,15 @@ class MainApp(QMainWindow):
         self.type_button.setStyleSheet("background: #ffffff")
         self.type_button.setGeometry(680, 480, 80, 20)
 
+        #* Type input
+        self.type_input.setStyleSheet("background: #ffffff")
+        self.type_input.setGeometry(780, 480, 120, 20)
+        self.type_input.setPlaceholderText("Escriba un color")
+
+        #* Label color name
+        self.label_color_output.setStyleSheet("color: #ffffff")
+        self.label_color_output.setGeometry(780, 500, 200, 50)
+
         #* SLiders HSV min
         self.labelMin_HSV.setStyleSheet("color: #ffffff")
         self.labelMin_HSV.setGeometry(1000, 20, 50, 20)
@@ -259,9 +277,12 @@ class MainApp(QMainWindow):
         self.roi_video.clear()
 
         try:
-            self.Work_default.terminate()
+            try:
+                self.Work_default.terminate()
+            except:
+                self.Work_name.terminate()
         except:
-            self.Work_name.terminate()
+            pass
 
         self.Work_HSV = Work_HSV()
         self.Work_HSV.start()
@@ -284,14 +305,30 @@ class MainApp(QMainWindow):
 
 	#! -------------------- Name VIDEO --------------------- !#
 
+    def give_name(self):
+
+        global color_name
+
+        new_color = self.type_input.text()
+        new_color = new_color.strip().lower()
+
+        if new_color in colores:
+            color_name = new_color
+        else:
+            self.label_color_output.setText(f"El color: {new_color} no se encuentra en la lista")
+
     def start_name(self):
+
         self.video.clear()
         self.roi_video.clear()
 
         try:
-            self.Work_default.terminate()
+            try:
+                self.Work_default.terminate()
+            except:
+                self.Work_HSV.terminate()
         except:
-            self.Work_HSV.terminate()
+            pass
 
         self.Work_name = Work_name()
         self.Work_name.start()
@@ -509,7 +546,6 @@ class Work_HSV(QThread):
             frame = cv2.flip(frame, 1)
             make_rectangle(frame)
             roi = make_roi(frame)
-            # color_detection(roi, area)
             HSV_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
             Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             convertir_QT = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
@@ -520,7 +556,6 @@ class Work_HSV(QThread):
             ret, frame = cap.read()
             frame = cv2.flip(frame, 1)
             roi = make_roi(frame)
-            # Image_roi = colors_pixels(roi)
             Image_roi = HSV_pixeles(roi, low_H, low_S, low_V, up_H, up_S, up_V)
             Image_roi = cv2.cvtColor(Image_roi, cv2.COLOR_BGR2RGB)
             cvt2QtFormat = QImage(Image_roi.data, Image_roi.shape[1], Image_roi.shape[0], QImage.Format_RGB888)
@@ -539,12 +574,15 @@ class Work_name(QThread):
     Imageupd = pyqtSignal(QImage)
     Imageupd_roi = pyqtSignal(QImage)
 
-    def __init__(self, parent = None, index = 0):
+    def __init__(self, parent = None, index = 0, name = None):
         super(Work_name, self).__init__(parent)
         self.index = index
         self.hilo = True
+        self.name = name
 
     def run(self):
+
+        global color_name
 
         # Variable global del área mínima para detectar color
         global area
@@ -562,8 +600,7 @@ class Work_name(QThread):
             frame = cv2.flip(frame, 1)
             make_rectangle(frame)
             roi = make_roi(frame)
-            # color_detection(roi, area)
-            name_color(roi, area, "rojo")
+            name_color(roi, area, color_name)
             Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             convertir_QT = QImage(Image.data, Image.shape[1], Image.shape[0], QImage.Format_RGB888)
             pic = convertir_QT.scaled(640, 480, Qt.KeepAspectRatio)
@@ -573,8 +610,7 @@ class Work_name(QThread):
             ret, frame = cap.read()
             frame = cv2.flip(frame, 1)
             roi = make_roi(frame)
-            # Image_roi = colors_pixels(roi)
-            Image_roi = name_pixeles(roi, "rojo")
+            Image_roi = name_pixeles(roi, color_name)
             Image_roi = cv2.cvtColor(Image_roi, cv2.COLOR_BGR2RGB)
             cvt2QtFormat = QImage(Image_roi.data, Image_roi.shape[1], Image_roi.shape[0], QImage.Format_RGB888)
             pic_roi = cvt2QtFormat.scaled(300, 300, Qt.KeepAspectRatio)
