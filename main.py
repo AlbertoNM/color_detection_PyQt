@@ -28,11 +28,11 @@ class MainApp(QMainWindow):
 
         #* Botón de inicio
         self.start_button = QPushButton('start', self)
-        self.start_button.clicked.connect(self.start)
+        self.start_button.clicked.connect(self.start_default)
 
         #* Botón de stop
         self.stop_button = QPushButton('stop', self)
-        self.stop_button.clicked.connect(self.stop)
+        self.stop_button.clicked.connect(self.stop_default)
 
         #* Input de número
         self.input_area = QLineEdit("5000", self)
@@ -49,6 +49,7 @@ class MainApp(QMainWindow):
 
         #* HSV button
         self.HSV_button = QPushButton("HSV",self)
+        self.HSV_button.clicked.connect(self.start_HSV)
 
         #* Name button
         self.name_button = QPushButton("Nombre",self)
@@ -229,33 +230,42 @@ class MainApp(QMainWindow):
 
 	#! -------------------- Default VIDEO -------------------- !#
 
-    def start(self):
-        self.Work = Work_default()
-        self.Work.start()
-        self.Work.Imageupd.connect(self.Imageupd_slot)
-        self.Work.Imageupd_roi.connect(self.Imageupd_slot2)
+    def start_default(self):
+        self.Work_default = Work_default()
+        self.Work_default.start()
+        self.Work_default.Imageupd.connect(self.Imageupd_slot_default)
+        self.Work_default.Imageupd_roi.connect(self.Imageupd_slot_default2)
 
-    def Imageupd_slot(self, Image):
+    def Imageupd_slot_default(self, Image):
         self.video.setPixmap(QPixmap.fromImage(Image))
 
-    def Imageupd_slot2(self, Image):
+    def Imageupd_slot_default2(self, Image):
         self.roi_video.setPixmap(QPixmap.fromImage(Image))
 
-    def stop(self):
+    def stop_default(self):
         try:
             self.video.clear()
             self.roi_video.clear()
-            self.Work.stop()
+            self.Work_default.stop()
         except:
             pass
 
 	#! --------------------- HSV VIDEO --------------------- !#
 
-    def start_SHV(self):
-        self.Work_HSV = Work_HSV()
-        self.Work_HSV.start()
-        self.Work_HSV.Imageupd.connect(self.Imageupd_slot_HSV)
-        self.Work_HSV.Imageupd_roi.connect(self.Imageupd_slot2_HSV)
+    def start_HSV(self):
+        try:
+
+            self.video.clear()
+            self.roi_video.clear()
+            self.Work_default.stop()
+            self.Work_HSV = Work_HSV()
+            self.Work_HSV.start()
+            self.Work_HSV.Imageupd.connect(self.Imageupd_slot_HSV)
+            self.Work_HSV.Imageupd_roi.connect(self.Imageupd_slot2_HSV)
+
+        except:
+            pass
+
 
     def Imageupd_slot_HSV(self, Image):
         self.video.setPixmap(QPixmap.fromImage(Image))
@@ -273,19 +283,19 @@ class MainApp(QMainWindow):
 
 	#! -------------------- Name VIDEO --------------------- !#
 
-    def start_SHV(self):
+    def start_name(self):
         self.Work_name = Work_name()
         self.Work_name.start()
-        self.Work_name.Imageupd.connect(self.Imageupd_slot_HSV)
-        self.Work_name.Imageupd_roi.connect(self.Imageupd_slot2_HSV)
+        self.Work_name.Imageupd.connect(self.Imageupd_slot_name)
+        self.Work_name.Imageupd_roi.connect(self.Imageupd_slot2_name)
 
-    def Imageupd_slot_HSV(self, Image):
+    def Imageupd_slot_name(self, Image):
         self.video.setPixmap(QPixmap.fromImage(Image))
 
-    def Imageupd_slot2_HSV(self, Image):
+    def Imageupd_slot2_name(self, Image):
         self.roi_video.setPixmap(QPixmap.fromImage(Image))
 
-    def stop_HSV(self):
+    def stop_name(self):
         try:
             self.video.clear()
             self.roi_video.clear()
@@ -457,6 +467,10 @@ class Work_default(QThread):
             if ret:
                 self.Imageupd.emit(pic)
                 self.Imageupd_roi.emit(pic_roi)
+
+    def stop(self):
+        self.hilo = False
+        self.quit()
 
 class Work_HSV(QThread):
 
