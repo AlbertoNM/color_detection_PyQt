@@ -10,25 +10,25 @@ colores = {
     "naranja": {
         "nombre": "Naranja",
         "referencia": np.array([0, 128, 255]),
-        "bajo": np.array([10, 100, 100]),
-        "alto": np.array([20, 255, 255]),
+        "bajo": np.array([4, 170, 110]),
+        "alto": np.array([15, 255, 255]),
     },
     "amarillo": {
         "nombre": "Amarillo",
         "referencia": np.array([0, 255, 255]),
-        "bajo": np.array([25, 100, 100]),
+        "bajo": np.array([25, 45, 45]),
         "alto": np.array([35, 255, 255]),
     },
     "verde": {
         "nombre": "Verde",
         "referencia": np.array([0, 255, 0]),
-        "bajo": np.array([45, 50, 50]),
+        "bajo": np.array([35, 45, 45]),
         "alto": np.array([60, 255, 255]),
     },
     "azul": {
         "nombre": "Azul",
         "referencia": np.array([255, 0, 0]),
-        "bajo": np.array([100, 50, 50]),
+        "bajo": np.array([80, 50, 0]),
         "alto": np.array([125, 255, 255]),
     },
     "morado": {

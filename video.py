@@ -15,10 +15,10 @@ while True:
     rojoAlto = np.array([3, 255, 255])
     maskRed = cv2.inRange(hsv, rojoBajo,rojoAlto)
 
-    mask = cv2.bitwise_and(frame, frame, mask= maskRed)
+    # mask = cv2.bitwise_and(frame, frame, mask= maskRed)
     # colors_frame = colors_pixels(frame)
 
-    cv2.imshow("Mask", mask)
+    # cv2.imshow("Mask", mask)
     cv2.imshow("Video", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'): break
