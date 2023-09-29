@@ -1,5 +1,6 @@
 # Color detection with PyQt
-Creating an interface for color detection
+
+Interfaz para la detección de distintos rangos de colores
 
 ## Requirements:
 
