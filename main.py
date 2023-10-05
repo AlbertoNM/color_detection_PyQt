@@ -1,6 +1,7 @@
 import typing
 from PyQt5.QtCore import QObject
 import cv2
+from PyQt5.QtMultimedia import QCameraInfo
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -26,6 +27,11 @@ class MainApp(QMainWindow):
 
         #* Cuadro de video del ROI
         self.roi_video = QLabel('', self)
+
+        #* Lista de cámaras
+        self.camera_list = QComboBox(self)
+        self.online_cam = QCameraInfo.availableCameras()
+        self.camera_list.addItems([c.description() for c in self.online_cam])
 
         #* Botón de inicio
         self.start_button = QPushButton('start', self)
@@ -144,13 +150,17 @@ class MainApp(QMainWindow):
         self.roi_video.setStyleSheet("background: #000000")
         self.roi_video.setGeometry(680, 50, 300, 300)
 
+        #* Lista de cámaras
+        self.camera_list.setStyleSheet("background: #ffffff")
+        self.camera_list.setGeometry(10, 10, 150, 23)
+
         #* Botón de inicio
         self.start_button.setStyleSheet("background: #ffffff")
-        self.start_button.setGeometry(10, 10, 75, 23)
+        self.start_button.setGeometry(180, 10, 75, 23)
 
         #* Botón de stop
         self.stop_button.setStyleSheet("background: #ffffff")
-        self.stop_button.setGeometry(100, 10, 75, 23)
+        self.stop_button.setGeometry(275, 10, 75, 23)
 
         #* Input de número
         self.input_area.setStyleSheet("background: #ffffff")
@@ -250,6 +260,8 @@ class MainApp(QMainWindow):
 	#! -------------------- Default VIDEO -------------------- !#
 
     def start_default(self):
+        global camIndex
+        camIndex = self.camera_list.currentIndex()
         self.Work_default = Work_default()
         self.Work_default.start()
         self.Work_default.Imageupd.connect(self.Imageupd_slot_default)
@@ -483,7 +495,10 @@ class Work_default(QThread):
         # Variables globales de HSV
         global low_H, low_S, low_V, up_H, up_S, up_V
 
-        cap = cv2.VideoCapture(0)
+        # Cámara
+        global camIndex
+
+        cap = cv2.VideoCapture(camIndex)
 
         while self.hilo:
 
@@ -536,7 +551,10 @@ class Work_HSV(QThread):
         # Variables globales de HSV
         global low_H, low_S, low_V, up_H, up_S, up_V
 
-        cap = cv2.VideoCapture(0)
+        # Cámara
+        global camIndex
+
+        cap = cv2.VideoCapture(camIndex)
 
         while self.hilo:
 
@@ -590,7 +608,10 @@ class Work_name(QThread):
         # Variables globales de HSV
         global low_H, low_S, low_V, up_H, up_S, up_V
 
-        cap = cv2.VideoCapture(0)
+        # Cámara
+        global camIndex
+
+        cap = cv2.VideoCapture(camIndex)
 
         while self.hilo:
 
