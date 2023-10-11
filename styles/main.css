@@ -1,0 +1,39 @@
+#MainWindow {
+	background: #212121;
+}
+
+QPushButton {
+	background: white;
+}
+
+QLineEdit {
+	background: white;
+}
+
+QLabel {
+	color: white;
+}
+
+QCheckBox {
+	color: white;
+}
+
+#video {
+	background: black;
+}
+
+#roi_video {
+	background: black;
+}
+
+#cuadro_color {
+	background-color: qlineargradient(spread:pad, x1:0.5, y1:0, x2:0.5, y2:1, stop:0 hsv(0,0,0), stop:1 hsv(359,255,255));
+}
+
+#sliderMin_H {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 0, 0, 255), stop:0.166 rgba(255, 255, 0, 255), stop:0.333 rgba(0, 255, 0, 255), stop:0.5 rgba(0, 255, 255, 255), stop:0.666 rgba(0, 0, 255, 255), stop:0.833 rgba(255, 0, 255, 255), stop:1 rgba(255, 0, 0, 255));
+}
+
+#sliderMax_H {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(255, 0, 0, 255), stop:0.166 rgba(255, 255, 0, 255), stop:0.333 rgba(0, 255, 0, 255), stop:0.5 rgba(0, 255, 255, 255), stop:0.666 rgba(0, 0, 255, 255), stop:0.833 rgba(255, 0, 255, 255), stop:1 rgba(255, 0, 0, 255));
+}
