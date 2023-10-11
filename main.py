@@ -109,9 +109,12 @@ class MainApp(QMainWindow):
         self.ui.video.setPixmap(original)
 
     def stop(self):
+        try:
 
-        self.ui.video.clear()
-        self.Work.stop()
+            self.ui.video.clear()
+            self.Work.stop()
+        except:
+            pass
 
     def color_name_change(self):
 
