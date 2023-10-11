@@ -22,8 +22,7 @@ class Ui_MainWindow(object):
 
         # Loading styles
         MainWindow.setStyleSheet(CssLoader("./styles/main.css"))
-        
-        MainWindow.resize(1300, 600)
+
         MainWindow.setMinimumSize(QtCore.QSize(1300, 600))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -85,10 +84,10 @@ class Ui_MainWindow(object):
         self.HSV_checkBox = QtWidgets.QCheckBox(self.centralwidget)
         self.HSV_checkBox.setObjectName("HSV_checkBox")
         self.verticalLayout_2.addWidget(self.HSV_checkBox)
-        self.name_checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.name_checkBox.setObjectName("name_checkBox")
-        self.verticalLayout_2.addWidget(self.name_checkBox)
         self.type_checkBox = QtWidgets.QCheckBox(self.centralwidget)
+        self.type_checkBox.setChecked(False)
+        self.type_checkBox.setAutoRepeat(False)
+        self.type_checkBox.setTristate(False)
         self.type_checkBox.setObjectName("type_checkBox")
         self.verticalLayout_2.addWidget(self.type_checkBox)
         self.type_input = QtWidgets.QLineEdit(self.centralwidget)
@@ -236,7 +235,6 @@ class Ui_MainWindow(object):
         self.stop_button.setText(_translate("MainWindow", "Stop"))
         self.input_area.setText(_translate("MainWindow", "5000"))
         self.HSV_checkBox.setText(_translate("MainWindow", "HSV"))
-        self.name_checkBox.setText(_translate("MainWindow", "Nombre"))
         self.type_checkBox.setText(_translate("MainWindow", "Escrito"))
         self.label_10.setText(_translate("MainWindow", "HSV Min"))
         self.label_3.setText(_translate("MainWindow", "H"))

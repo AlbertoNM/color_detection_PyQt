@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from our_tools.tools import *
+from our_tools.colors import colores
 
 area = 5000
 low_H, low_S, low_V, up_H, up_S, up_V = 0,0,0,179,255,255
@@ -30,7 +31,7 @@ class MainApp(QMainWindow):
         self.ui.input_area.textChanged.connect(self.slider_value)
 
         #* Input de color
-        self.ui.type_input.keyPressEvent.connect(self.color_name_change)
+        self.ui.type_input.returnPressed.connect(self.color_name_change)
 
         #* Slider
         self.ui.slider_area.valueChanged.connect(self.detection_area)
@@ -93,6 +94,15 @@ class MainApp(QMainWindow):
             roi = make_roi(Image)
             name_color(roi, area, color_name)
 
+        if self.ui.type_checkBox.isChecked() == False and self.ui.HSV_checkBox.isChecked() == False:
+
+            frame = colors_pixels(Image)
+            frame = self.cv_to_qt(frame, 300, 300)
+            self.ui.roi_video.setPixmap(frame)
+
+            roi = make_roi(Image)
+            color_detection(roi, area)
+
 
         make_rectangle(Image)
         original = self.cv_to_qt(Image)
@@ -103,9 +113,18 @@ class MainApp(QMainWindow):
         self.ui.video.clear()
         self.Work.stop()
 
-    def color_name_change(self, name):
-        global color_name
-        color_name = name
+    def color_name_change(self):
+
+        new_color = self.ui.type_input.text()
+        new_color = new_color.strip().lower()
+
+        if new_color in colores:
+            global color_name
+            color_name = new_color
+            self.ui.label_color_output.setText(f"{new_color} en pantalla")
+        else:
+            self.ui.label_color_output.setText(f"{new_color} no está en lista")
+
 
 	#! ------------------ Slider e input -------------------- !#
 

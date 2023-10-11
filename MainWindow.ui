@@ -178,16 +178,18 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="name_checkBox">
-          <property name="text">
-           <string>Nombre</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QCheckBox" name="type_checkBox">
           <property name="text">
            <string>Escrito</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+          <property name="autoRepeat">
+           <bool>false</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
