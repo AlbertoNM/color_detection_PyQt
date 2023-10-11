@@ -8,6 +8,7 @@ from our_tools.tools import *
 
 area = 5000
 low_H, low_S, low_V, up_H, up_S, up_V = 0,0,0,179,255,255
+color_name = "rojo"
 
 class MainApp(QMainWindow):
 
@@ -59,42 +60,40 @@ class MainApp(QMainWindow):
         self.Work.Imageupd.connect(self.Imageupd_slot)
         self.Work.start()
 
-    def cv_to_qt(self, Image):
+    def cv_to_qt(self, Image, widht = 640, height = 480):
 
         pic = cv2.cvtColor(Image, cv2.COLOR_BGR2RGB)
         convertir_QT = QImage(pic.data, pic.shape[1], pic.shape[0], QImage.Format_RGB888)
-        return QPixmap.fromImage(convertir_QT)
+        frame = convertir_QT.scaled(widht, height, Qt.KeepAspectRatio)
+        return QPixmap.fromImage(frame)
 
     @pyqtSlot(np.ndarray)
     def Imageupd_slot(self, Image):
 
-        global low_H, low_S, low_V, up_H, up_S, up_V, area
+        # global low_H, low_S, low_V, up_H, up_S, up_V, area
+
+        if self.ui.HSV_checkBox.isChecked() == True and self.ui.type_checkBox.isChecked() == False:
+
+            frame = HSV_pixeles(Image, low_H, low_S, low_S, up_H, up_S, up_V)
+            frame = self.cv_to_qt(frame, 300, 300)
+            self.ui.roi_video.setPixmap(frame)
+
+            roi = make_roi(Image)
+            HSV_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
+
+        if self.ui.type_checkBox.isChecked() == True and self.ui.HSV_checkBox.isChecked() == False:
+
+            frame = name_pixeles(Image, color_name)
+            frame = self.cv_to_qt(frame, 300, 300)
+            self.ui.roi_video.setPixmap(frame)
+
+            roi = make_roi(Image)
+            name_color(roi, area, color_name)
 
 
-        # original = self.cv_to_qt(Image)
-
-        # pic = cv2.cvtColor(Image, cv2.COLOR_BGR2RGB)
-        # convertir_QT = QImage(pic.data, pic.shape[1], pic.shape[0], QImage.Format_RGB888)
-        # original = QPixmap.fromImage(convertir_QT)
-
-        # self.ui.video.setPixmap(original)
-
-        frame = prueba_color(Image, area, low_H, low_S, low_S, up_H, up_S, up_V)
-
-        Image_roi = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        roi_video = QImage(Image_roi.data, Image_roi.shape[1], Image_roi.shape[0], QImage.Format_RGB888)
-        roi_video = roi_video.scaled(300, 300, Qt.KeepAspectRatio)
-        roi_video = QPixmap.fromImage(roi_video)
-
-        self.ui.roi_video.setPixmap(roi_video)
-
-
-        # if self.ui.HSV_checkBox.isChecked() == True:
-        #     global low_H, low_S, low_V, up_H, up_S, up_V, area
-        #     frame = prueba_color(Image, area, low_H, low_S, low_S, up_H, up_S, up_V)
-        #     frame = self.cv_to_qt(frame)
-        #     self.ui.roi_video.setPixmap(frame)
-
+        make_rectangle(Image)
+        original = self.cv_to_qt(Image)
+        self.ui.video.setPixmap(original)
 
     def stop(self):
 
