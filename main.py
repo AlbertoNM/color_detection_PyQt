@@ -29,6 +29,9 @@ class MainApp(QMainWindow):
         #* Input de número
         self.ui.input_area.textChanged.connect(self.slider_value)
 
+        #* Input de color
+        self.ui.type_input.keyPressEvent.connect(self.color_name_change)
+
         #* Slider
         self.ui.slider_area.valueChanged.connect(self.detection_area)
 
@@ -99,6 +102,10 @@ class MainApp(QMainWindow):
 
         self.ui.video.clear()
         self.Work.stop()
+
+    def color_name_change(self, name):
+        global color_name
+        color_name = name
 
 	#! ------------------ Slider e input -------------------- !#
 
