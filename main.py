@@ -68,17 +68,22 @@ class MainApp(QMainWindow):
     @pyqtSlot(np.ndarray)
     def Imageupd_slot(self, Image):
 
+        global low_H, low_S, low_V, up_H, up_S, up_V, area
+
 
         # original = self.cv_to_qt(Image)
 
-        pic = cv2.cvtColor(Image, cv2.COLOR_BGR2RGB)
-        convertir_QT = QImage(pic.data, pic.shape[1], pic.shape[0], QImage.Format_RGB888)
-        original = QPixmap.fromImage(convertir_QT)
+        # pic = cv2.cvtColor(Image, cv2.COLOR_BGR2RGB)
+        # convertir_QT = QImage(pic.data, pic.shape[1], pic.shape[0], QImage.Format_RGB888)
+        # original = QPixmap.fromImage(convertir_QT)
 
-        self.ui.video.setPixmap(original)
+        # self.ui.video.setPixmap(original)
 
-        roi_video = convertir_QT
-        roi_video =QPixmap.scaled(roi_video, 300, 300, Qt.KeepAspectRatio)
+        frame = prueba_color(Image, area, low_H, low_S, low_S, up_H, up_S, up_V)
+
+        Image_roi = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        roi_video = QImage(Image_roi.data, Image_roi.shape[1], Image_roi.shape[0], QImage.Format_RGB888)
+        roi_video = roi_video.scaled(300, 300, Qt.KeepAspectRatio)
         roi_video = QPixmap.fromImage(roi_video)
 
         self.ui.roi_video.setPixmap(roi_video)
