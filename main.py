@@ -1,16 +1,4 @@
-from ui import Ui_MainWindow
-from PyQt5.QtCore import QObject
-import cv2
-from PyQt5.QtMultimedia import QCameraInfo
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from our_tools.tools import *
-from our_tools.colors import colores
-
-area = 5000
-low_H, low_S, low_V, up_H, up_S, up_V = 0,0,0,179,255,255
-color_name = "rojo"
+from views import *
 
 class MainApp(QMainWindow):
 
@@ -40,6 +28,10 @@ class MainApp(QMainWindow):
 
         #* Slider del area
         self.ui.slider_area.valueChanged.connect(self.detection_area)
+
+        #* Checkboxes
+        self.ui.HSV_checkBox.stateChanged.connect(lambda:self.ui.type_checkBox.setCheckState(False) if self.ui.HSV_checkBox.isChecked() == True else None)
+        self.ui.type_checkBox.stateChanged.connect(lambda:self.ui.HSV_checkBox.setCheckState(False) if self.ui.type_checkBox.isChecked() == True else None)
 
         #* Sliders HSV min
         self.ui.sliderMin_H.valueChanged.connect(self.HSV_spinValues)
