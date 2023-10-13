@@ -1,8 +1,12 @@
-#MainWindow {
+/* #MainWindow {
 	background: #212121;
 }
 
-QPushButton {
+QTabWidget {
+    background: #212121;
+} */
+
+/* QPushButton {
 	background: white;
 }
 
@@ -16,7 +20,7 @@ QLabel {
 
 QCheckBox {
 	color: white;
-}
+} */
 
 #video {
 	background: black;

@@ -24,7 +24,7 @@ class MainApp(QMainWindow):
         self.ui.input_area.textChanged.connect(self.slider_value)
 
         #* Input de color
-        self.ui.type_input.returnPressed.connect(self.color_name_change)
+        self.ui.type_input.returnPressed.connect(lambda:self.ui.type_input.text().strip().lower() if self.ui.type_input.text().strip().lower() in colores else self.ui.label_color_output.setText(f"{self.ui.type_input.text().strip().lower()} no está en lista"))
 
         #* Slider del area
         self.ui.slider_area.valueChanged.connect(self.detection_area)
@@ -52,6 +52,9 @@ class MainApp(QMainWindow):
 
         self.ui.sliderMax_V.valueChanged.connect(self.HSV_spinValues)
         self.ui.spinMax_V.valueChanged.connect(self.HSV_sliderValues)
+
+        #* Imagen de ayuda
+        self.ui.help_image.setPixmap(QtGui.QPixmap("./images/guide.JPG").scaled(1200,1200,Qt.KeepAspectRatio))
 
 	#! -------------------- Default VIDEO -------------------- !#
 
@@ -115,8 +118,7 @@ class MainApp(QMainWindow):
 
     def color_name_change(self):
 
-        new_color = self.ui.type_input.text()
-        new_color = new_color.strip().lower()
+        new_color = self.ui.type_input.text().strip().lower()
 
         if new_color in colores:
             global color_name
@@ -124,7 +126,6 @@ class MainApp(QMainWindow):
             self.ui.label_color_output.setText(f"{new_color} en pantalla")
         else:
             self.ui.label_color_output.setText(f"{new_color} no está en lista")
-
 
 	#! ------------------ Slider e input -------------------- !#
 
@@ -218,6 +219,7 @@ class Work(QThread):
 
 if __name__ == "__main__":
     app = QApplication([])
+    app.setStyleSheet(open("./styles/main.css", "r").read())
     window = MainApp()
     window.show()
     app.exec_()
