@@ -203,7 +203,7 @@ def HSV_color(frame:tuple, area:int, low_H:int, low_S:int, low_V:int, up_H:int, 
 
     contour = contours(mask)
 
-    color_area(contour, frame, "color", area, colores["rojo"]["referencia"])
+    color_area(contour, frame, "", area, colores["rojo"]["referencia"])
 
 def name_pixeles(frame:tuple, color_name:str) -> tuple:
 

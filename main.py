@@ -24,14 +24,10 @@ class MainApp(QMainWindow):
         self.ui.input_area.textChanged.connect(self.slider_value)
 
         #* Input de color
-        self.ui.type_input.returnPressed.connect(lambda:self.ui.type_input.text().strip().lower() if self.ui.type_input.text().strip().lower() in colores else self.ui.label_color_output.setText(f"{self.ui.type_input.text().strip().lower()} no está en lista"))
+        self.ui.type_input.returnPressed.connect(self.color_name_change)
 
         #* Slider del area
         self.ui.slider_area.valueChanged.connect(self.detection_area)
-
-        #* Checkboxes
-        self.ui.HSV_checkBox.stateChanged.connect(lambda:self.ui.type_checkBox.setCheckState(False) if self.ui.HSV_checkBox.isChecked() == True else None)
-        self.ui.type_checkBox.stateChanged.connect(lambda:self.ui.HSV_checkBox.setCheckState(False) if self.ui.type_checkBox.isChecked() == True else None)
 
         #* Sliders HSV min
         self.ui.sliderMin_H.valueChanged.connect(self.HSV_spinValues)
@@ -76,25 +72,7 @@ class MainApp(QMainWindow):
     @pyqtSlot(np.ndarray)
     def Imageupd_slot(self, Image):
 
-        if self.ui.HSV_checkBox.isChecked() == True and self.ui.type_checkBox.isChecked() == False:
-
-            frame = HSV_pixeles(Image, low_H, low_S, low_S, up_H, up_S, up_V)
-            frame = self.cv_to_qt(frame, 300, 300)
-            self.ui.roi_video.setPixmap(frame)
-
-            roi = make_roi(Image)
-            HSV_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
-
-        if self.ui.type_checkBox.isChecked() == True and self.ui.HSV_checkBox.isChecked() == False:
-
-            frame = name_pixeles(Image, color_name)
-            frame = self.cv_to_qt(frame, 300, 300)
-            self.ui.roi_video.setPixmap(frame)
-
-            roi = make_roi(Image)
-            name_color(roi, area, color_name)
-
-        if self.ui.type_checkBox.isChecked() == False and self.ui.HSV_checkBox.isChecked() == False:
+        if self.ui.default_radiobutton.isChecked():
 
             frame = colors_pixels(Image)
             frame = self.cv_to_qt(frame, 300, 300)
@@ -103,6 +81,23 @@ class MainApp(QMainWindow):
             roi = make_roi(Image)
             color_detection(roi, area)
 
+        if self.ui.HSV_radiobutton.isChecked():
+
+            frame = HSV_pixeles(Image, low_H, low_S, low_S, up_H, up_S, up_V)
+            frame = self.cv_to_qt(frame, 300, 300)
+            self.ui.roi_video.setPixmap(frame)
+
+            roi = make_roi(Image)
+            HSV_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
+
+        if self.ui.type_radiobutton.isChecked():
+
+            frame = name_pixeles(Image, color_name)
+            frame = self.cv_to_qt(frame, 300, 300)
+            self.ui.roi_video.setPixmap(frame)
+
+            roi = make_roi(Image)
+            name_color(roi, area, color_name)
 
         make_rectangle(Image)
         original = self.cv_to_qt(Image)
