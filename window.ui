@@ -226,6 +226,13 @@
              <widget class="QLineEdit" name="type_input"/>
             </item>
             <item>
+             <widget class="QLabel" name="label_color_name">
+              <property name="text">
+               <string>rojo</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QLabel" name="label_color_output">
               <property name="text">
                <string/>

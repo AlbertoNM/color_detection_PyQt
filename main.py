@@ -24,7 +24,7 @@ class MainApp(QMainWindow):
         self.ui.input_area.textChanged.connect(self.slider_value)
 
         #* Input de color
-        self.ui.type_input.returnPressed.connect(self.color_name_change)
+        self.ui.type_input.returnPressed.connect(lambda:self.ui.label_color_name.setText(self.ui.type_input.text().strip().lower()) if self.ui.type_input.text().strip().lower() in colores else self.ui.label_color_output.setText(f"{self.ui.type_input.text().strip().lower()} no está en lista"))
 
         #* Slider del area
         self.ui.slider_area.valueChanged.connect(self.detection_area)
@@ -92,7 +92,7 @@ class MainApp(QMainWindow):
 
         if self.ui.type_radiobutton.isChecked():
 
-            frame = name_pixeles(Image, color_name)
+            frame = name_pixeles(Image, self.ui.label_color_name.text().strip().lower())
             frame = self.cv_to_qt(frame, 300, 300)
             self.ui.roi_video.setPixmap(frame)
 
@@ -110,17 +110,6 @@ class MainApp(QMainWindow):
             self.Work.stop()
         except:
             pass
-
-    def color_name_change(self):
-
-        new_color = self.ui.type_input.text().strip().lower()
-
-        if new_color in colores:
-            global color_name
-            color_name = new_color
-            self.ui.label_color_output.setText(f"{new_color} en pantalla")
-        else:
-            self.ui.label_color_output.setText(f"{new_color} no está en lista")
 
 	#! ------------------ Slider e input -------------------- !#
 
