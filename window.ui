@@ -223,12 +223,16 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="type_input"/>
+             <widget class="QLineEdit" name="type_input">
+              <property name="maxLength">
+               <number>20</number>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label_color_name">
               <property name="text">
-               <string>rojo</string>
+               <string>Rojo</string>
               </property>
              </widget>
             </item>

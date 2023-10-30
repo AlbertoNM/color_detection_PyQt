@@ -24,7 +24,7 @@ class MainApp(QMainWindow):
         self.ui.input_area.textChanged.connect(self.slider_value)
 
         #* Input de color
-        self.ui.type_input.returnPressed.connect(lambda:self.ui.label_color_name.setText(self.ui.type_input.text().strip().lower()) if self.ui.type_input.text().strip().lower() in colores else self.ui.label_color_output.setText(f"{self.ui.type_input.text().strip().lower()} no está en lista"))
+        self.ui.type_input.returnPressed.connect(lambda:self.ui.label_color_name.setText(self.ui.type_input.text().strip().lower().capitalize()) if self.ui.type_input.text().strip().lower() in colores else self.ui.label_color_output.setText(f"{self.ui.type_input.text().strip().lower()} no está en lista"))
 
         #* Slider del area
         self.ui.slider_area.valueChanged.connect(self.detection_area)

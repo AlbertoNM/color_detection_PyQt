@@ -198,12 +198,39 @@ def HSV_color(frame:tuple, area:int, low_H:int, low_S:int, low_V:int, up_H:int, 
 	* Frame -> Frame del video
 	"""
 
+    color_name = ''
+    color_reference = np.array([255, 255, 255])
+
+    if low_H >= 0 and up_H <= 3 or low_H >= 175 and up_H <= 179:
+        color_name = colores['rojo']["nombre"]
+        color_reference = colores['rojo']["referencia"]
+
+    if low_H >= 4 and up_H <= 15:
+        color_name = colores['naranja']["nombre"]
+        color_reference = colores['naranja']["referencia"]
+
+    if low_H >= 25 and up_H <= 35:
+        color_name = colores['amarillo']["nombre"]
+        color_reference = colores['amarillo']["referencia"]
+
+    if low_H >= 36 and up_H <= 60:
+        color_name = colores['verde']["nombre"]
+        color_reference = colores['verde']["referencia"]
+
+    if low_H >= 80 and up_H <= 125:
+        color_name = colores['azul']["nombre"]
+        color_reference = colores['azul']["referencia"]
+
+    if low_H >= 130 and up_H <= 140:
+        color_name = colores['morado']["nombre"]
+        color_reference = colores['morado']["referencia"]
+
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv, np.array([low_H, low_S, low_V]), np.array([up_H, up_S, up_V]))
 
     contour = contours(mask)
 
-    color_area(contour, frame, "", area, colores["rojo"]["referencia"])
+    color_area(contour, frame, color_name , area, color_reference)
 
 def name_pixeles(frame:tuple, color_name:str) -> tuple:
 
