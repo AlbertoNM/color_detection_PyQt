@@ -52,17 +52,18 @@ class MainApp(QMainWindow):
         #* Imagen de ayuda
         self.ui.help_image.setPixmap(QtGui.QPixmap("./images/guide.JPG").scaled(1200,1200,Qt.KeepAspectRatio))
 
-	#! -------------------- Default VIDEO -------------------- !#
+	#! ----------------------- VIDEO ------------------------ !#
 
     def start(self):
 
         global camIndex
         camIndex = self.ui.camera_list.currentIndex()
         self.Work = Work()
-        self.Work.Imageupd.connect(self.Imageupd_slot)
+        self.Work.Imageupd.connect(self.HSV_slot)
+        self.Work.Imageupd.connect(self.tf_slot)
         self.Work.start()
 
-    def cv_to_qt(self, Image, widht = 640, height = 480):
+    def cv_to_qt(self, Image, widht = 300, height = 300):
 
         pic = cv2.cvtColor(Image, cv2.COLOR_BGR2RGB)
         convertir_QT = QImage(pic.data, pic.shape[1], pic.shape[0], QImage.Format_RGB888)
@@ -70,38 +71,35 @@ class MainApp(QMainWindow):
         return QPixmap.fromImage(frame)
 
     @pyqtSlot(np.ndarray)
-    def Imageupd_slot(self, Image):
+    def HSV_slot(self, Image):
 
         if self.ui.default_radiobutton.isChecked():
 
             frame = colors_pixels(Image)
-            frame = self.cv_to_qt(frame, 300, 300)
-            self.ui.roi_video.setPixmap(frame)
-
-            roi = make_roi(Image)
-            color_detection(roi, area)
+            frame = self.cv_to_qt(frame)
+            self.ui.HSV_video.setPixmap(frame)
+            color_detection(Image, area)
 
         if self.ui.HSV_radiobutton.isChecked():
 
             frame = HSV_pixeles(Image, low_H, low_S, low_S, up_H, up_S, up_V)
-            frame = self.cv_to_qt(frame, 300, 300)
-            self.ui.roi_video.setPixmap(frame)
-
-            roi = make_roi(Image)
-            HSV_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
+            frame = self.cv_to_qt(frame)
+            self.ui.HSV_video.setPixmap(frame)
+            HSV_color(Image, area, low_H, low_S, low_V, up_H, up_S, up_V)
 
         if self.ui.type_radiobutton.isChecked():
 
             frame = name_pixeles(Image, self.ui.label_color_name.text().strip().lower())
-            frame = self.cv_to_qt(frame, 300, 300)
-            self.ui.roi_video.setPixmap(frame)
+            frame = self.cv_to_qt(frame)
+            self.ui.HSV_video.setPixmap(frame)
+            name_color(Image, area, self.ui.label_color_name.text().strip().lower())
 
-            roi = make_roi(Image)
-            name_color(roi, area, color_name)
-
-        make_rectangle(Image)
         original = self.cv_to_qt(Image)
-        self.ui.video.setPixmap(original)
+        self.ui.RGB_video.setPixmap(original)
+
+    @pyqtSlot(np.ndarray)
+    def tf_slot(self, Image):
+        pass
 
     def stop(self):
         try:
