@@ -1,4 +1,4 @@
-from views import *
+from modules import *
 
 class MainApp(QMainWindow):
 
