@@ -54,24 +54,48 @@ class MainApp(QMainWindow):
 
 	#! -------------------- Default VIDEO -------------------- !#
 
+    #* Función que inicia el hilo Work
     def start(self):
 
+        # Variable global del número de la cámara
         global camIndex
         camIndex = self.ui.camera_list.currentIndex()
+
+        # Inicia el hilo
         self.Work = Work()
+
+        # Se envía el dato emitido del hilo a la función: Imageupd_slot
         self.Work.Imageupd.connect(self.Imageupd_slot)
         self.Work.start()
 
+    #* Función que convierte un tipo de dato numpy a Qimage
     def cv_to_qt(self, Image, widht = 640, height = 480):
 
+        """
+        ### Convertir numpy a QImage
+
+        Parámetros:
+        * Image -> frame a convertir a QImage
+        * widht -> ancho del frame (default 640)
+        * height -> alto del frame (default 480)
+        ---
+        Returns: QImage
+        """
+
+        # Se transforma el espacio de color de bgr a rgb
         pic = cv2.cvtColor(Image, cv2.COLOR_BGR2RGB)
+
+        # Se transforma el tipo de dato a QImage con sus escalas
         convertir_QT = QImage(pic.data, pic.shape[1], pic.shape[0], QImage.Format_RGB888)
         frame = convertir_QT.scaled(widht, height, Qt.KeepAspectRatio)
+
         return QPixmap.fromImage(frame)
 
+    #* Función que utiliza las herramientas de opencv para la detección de color
     @pyqtSlot(np.ndarray)
     def Imageupd_slot(self, Image):
 
+        #! Detección default
         if self.ui.default_radiobutton.isChecked():
 
             frame = colors_pixels(Image)
@@ -81,6 +105,7 @@ class MainApp(QMainWindow):
             roi = make_roi(Image)
             color_detection(roi, area)
 
+        #! Detección HSV manual
         if self.ui.HSV_radiobutton.isChecked():
 
             frame = HSV_pixeles(Image, low_H, low_S, low_S, up_H, up_S, up_V)
@@ -90,6 +115,7 @@ class MainApp(QMainWindow):
             roi = make_roi(Image)
             HSV_color(roi, area, low_H, low_S, low_V, up_H, up_S, up_V)
 
+        #! Detección por color escrito
         if self.ui.type_radiobutton.isChecked():
 
             frame = name_pixeles(Image, self.ui.label_color_name.text().strip().lower())
@@ -103,6 +129,7 @@ class MainApp(QMainWindow):
         original = self.cv_to_qt(Image)
         self.ui.video.setPixmap(original)
 
+    #* Función que detiene el hilo Work
     def stop(self):
         try:
             self.ui.video.clear()
