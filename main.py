@@ -123,7 +123,7 @@ class MainApp(QMainWindow):
             self.ui.roi_video.setPixmap(frame)
 
             roi = make_roi(Image)
-            name_color(roi, area, color_name)
+            name_color(roi, area, self.ui.label_color_name.text().strip().lower())
 
         make_rectangle(Image)
         original = self.cv_to_qt(Image)
@@ -230,6 +230,7 @@ class Work(QThread):
 
 if __name__ == "__main__":
     app = QApplication([])
+    # Importamos desde la carpeta ./styles el archivo main.css para establecer estilos
     app.setStyleSheet(open("./styles/main.css", "r").read())
     window = MainApp()
     window.show()
