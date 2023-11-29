@@ -59,7 +59,7 @@ conda install -c conda-forge imutils
 ```
 
 ```Shell
-conda install -c conda-forge opencv-python
+conda install -c conda-forge opencv
 ```
 
 ```Shell
