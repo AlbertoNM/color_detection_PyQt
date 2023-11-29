@@ -44,32 +44,13 @@ def contours(maks:tuple) -> tuple:
     Genera los contornos de las áreas de la máscara
 
 	Parámetros:
-	* mask -- Máscara del color dado
+	* mask -> Máscara del color dado
  	---
 	Return: Áreas de la máscara
 	"""
     cnts = cv2.findContours(maks, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     return imutils.grab_contours(cnts)
-
-def red_ranges(frame: tuple, color: str) -> tuple:
-
-    """
-	### Combinar rojos
-	Esta función combina los dos rangos del color rojo dentro del espectro HSV
- 	Parámetros:
-	* Frame -> Frame del video
-	* Color -> Rojo
-	---
- 	Return ->  Máscara de los dos rangos HSV del color rojo
-	"""
-
-    mask_1 = cv2.inRange(frame, colores[color]["bajo"]["1"], colores[color]["alto"]["1"])
-    mask_2 = cv2.inRange(frame, colores[color]["bajo"]["2"], colores[color]["alto"]["2"])
-
-    mask = cv2.add(mask_1, mask_2)
-
-    return mask
 
 def color_detection(frame:tuple, area:int) -> None:
 
@@ -183,6 +164,12 @@ def HSV_pixeles(frame:tuple, low_H:int, low_S:int, low_V:int, up_H:int, up_S:int
 
  	Parámetros:
 	* Frame -> Frame del video
+    * low_H -> Rango mínimo de H
+    * low_S -> Rango mínimo de S
+    * low_V -> Rango mínimo de V
+    * up_H -> Rango máximo de H
+    * up_S -> Rango máximo de S
+    * up_V -> Rango máximo de V
 	---
  	Return -> Frames solo con los pixeles del rango de color dado
 	"""
@@ -197,10 +184,17 @@ def HSV_color(frame:tuple, area:int, low_H:int, low_S:int, low_V:int, up_H:int, 
 
     """
     ### Area del color
-	Esta función utiliza las variables globales modificadas manualmente por los sliders HSV y detecta el área del color dentro rango establecido
+	Esta función utiliza las variables globales modificadas manualmente por los sliders HSV y detecta el área del color dentro del rango establecido
 
  	Parámetros:
 	* Frame -> Frame del video
+    * area -> Área de detección
+    * low_H -> Rango mínimo de H
+    * low_S -> Rango mínimo de S
+    * low_V -> Rango mínimo de V
+    * up_H -> Rango máximo de H
+    * up_S -> Rango máximo de S
+    * up_V -> Rango máximo de V
 	"""
 
     color_name = ''
@@ -236,7 +230,8 @@ def name_pixeles(frame:tuple, color_name:str) -> tuple:
 	Esta función utiliza un nombre de color y busca si existe entre los colores default establecidos en el archivo colors.py para detectar los pixeles dentro de los rangos default dependiendo el nombre que se le asigne
 
  	Parámetros:
-	* Frame -> Frame del video
+	* frame -> Frame del video
+    * color_name -> nombre del color del dicionario
 	---
  	Return -> Frames solo con los pixeles del rango de color dado
 	"""
@@ -253,10 +248,12 @@ def name_color(frame:tuple, area:int, color_name:str) -> tuple:
 
     """
     ### Area del color
-	Esta función utiliza un nombre de color y busca si existe entre los colores default establecidos en el archivo colors.py para detectar el área dentro de los rangos default dependiendo el nombre que se le asigne
+	Esta función utiliza un nombre entre los colores establecidos en el archivo colors.py para detectar el área dentro de los rangos default dependiendo el nombre que se le asigne
 
  	Parámetros:
-	* Frame -> Frame del video
+	* frame -> Frame del video
+    * area -> Área de detección
+    * color_name -> Nombre del color del dicionario
 	"""
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
