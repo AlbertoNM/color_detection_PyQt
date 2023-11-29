@@ -1,4 +1,4 @@
-### area
+### Area
 
 Valor default
 
@@ -6,7 +6,7 @@ Valor default
 area = 5000
 ```
 
-Area es la variable que se utiliza para determinar el área de detección del color establecido, supongamos que tenemos una imagen de 10 x 10 pixeles, y solo queremos detectar un color que tenga un área de 4, el algorítmo solo detectará los 4 pixeles que estén juntos con el color o rango de color dado.
+`area` es la variable que se utiliza para determinar el área de detección del color establecido, supongamos que tenemos una imagen de 10 x 10 pixeles, y solo queremos detectar un color que tenga un área de 4, el algorítmo solo detectará los 4 pixeles que estén juntos con el color o rango de color dado.
 
 Si tenemos pixeles del color dado pero todos están separados, el algoritmo no lo detectará porque requiere que estén juntos, solo si bajamos el área a 1 detectará los pixeles individuales.
 
