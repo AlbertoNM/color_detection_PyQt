@@ -59,6 +59,10 @@ conda install -c conda-forge imutils
 ```
 
 ```Shell
+conda install -c conda-forge opencv-python
+```
+
+```Shell
 conda install -c conda-forge spyder
 ```
 Spyder contiene todo lo relacionado con OpenCV y PyQt
@@ -107,4 +111,8 @@ Los demás archivos son para ordenar y definir el espacio de trabajo, se recomie
 
 # Referencias
 
-[(2020). *Color Filtering/Segmentation/Detection – HSV*. Blog at Wordpress.com](https://cvexplained.wordpress.com/2020/04/28/color-detection-hsv/)
+[1] [(2019). Gabriela Solano. *Detección de colores en OpenCV – Python (En 4 pasos)*. OMES](https://omes-va.com/deteccion-de-colores/)
+
+[2] [(2020). *Color Filtering/Segmentation/Detection – HSV*. Blog at Wordpress.com](https://cvexplained.wordpress.com/2020/04/28/color-detection-hsv/)
+
+[3] [venv — Creación de entornos virtuales. Documentation python 3.8.17](https://docs.python.org/es/3.8/library/venv.html)
