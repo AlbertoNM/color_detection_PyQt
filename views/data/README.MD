@@ -23,8 +23,8 @@ up_S = 255
 up_V = 255
 ```
 
-Las variables low_H, low_S, low_V, up_H, up_S, up_V son las que guardan los valores del color HSV.
+Las variables `low_H`, `low_S`, `low_V`, `up_H`, `up_S`, `up_V` son las que guardan los valores del color HSV.
 
-> Estos rangos de color se explican a detalle en la imagen de ayuda del programa o en la [documentación inicial](https://github.com/AlbertoNM/color_detection_PyQt))
+> Estos rangos de color se explican a detalle en la imagen de ayuda del programa o en la [documentación inicial](https://github.com/AlbertoNM/color_detection_PyQt#images)
 
 Las variables "low" son las del rango mínimo del color, y las "up" las del rango máximo del color.
