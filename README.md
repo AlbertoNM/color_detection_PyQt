@@ -103,3 +103,8 @@ Estos archivos crean, por medio de un script, arcivhos de extensión .py que pue
 ### otros
 
 Los demás archivos son para ordenar y definir el espacio de trabajo, se recomienda no editarlos
+
+
+# Referencias
+
+[(2020). *Color Filtering/Segmentation/Detection – HSV*. Blog at Wordpress.com](https://cvexplained.wordpress.com/2020/04/28/color-detection-hsv/)

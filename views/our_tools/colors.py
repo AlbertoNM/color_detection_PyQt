@@ -1,11 +1,17 @@
 import numpy as np
 
 colores = {
-    "rojo": {
+    "rojo1": {
         "nombre": "Rojo",
         "referencia": np.array([0, 0, 255]),
-        "bajo": {"1": np.array([0, 100, 100]),"2": np.array([175, 100, 100])},
-        "alto": {"1": np.array([3, 255, 255]),"2": np.array([180, 255, 255])},
+        "bajo": np.array([0, 100, 100]),
+        "alto": np.array([3, 255, 255]),
+    },
+    "rojo2": {
+        "nombre": "Rojo",
+        "referencia": np.array([0, 0, 255]),
+        "bajo": np.array([175, 100, 100]),
+        "alto": np.array([180, 255, 255])
     },
     "naranja": {
         "nombre": "Naranja",

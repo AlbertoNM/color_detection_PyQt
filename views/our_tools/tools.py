@@ -84,21 +84,24 @@ def color_detection(frame:tuple, area:int) -> None:
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    red_mask = red_ranges(hsv, "rojo")
+    red1_mask = cv2.inRange(hsv, colores["rojo1"]["bajo"], colores["rojo1"]["alto"])
+    red2_mask = cv2.inRange(hsv, colores["rojo2"]["bajo"], colores["rojo2"]["alto"])
     orange_mask = cv2.inRange(hsv, colores["naranja"]["bajo"], colores["naranja"]["alto"])
     yellow_mask = cv2.inRange(hsv, colores["amarillo"]["bajo"], colores["amarillo"]["alto"])
     green_mask = cv2.inRange(hsv, colores["verde"]["bajo"], colores["verde"]["alto"])
     blue_mask = cv2.inRange(hsv, colores["azul"]["bajo"], colores["azul"]["alto"])
     purple_mask = cv2.inRange(hsv, colores["morado"]["bajo"], colores["morado"]["alto"])
 
-    cntsR = contours(red_mask)
+    cntsR1 = contours(red1_mask)
+    cntsR2 = contours(red2_mask)
     cntsN = contours(orange_mask)
     cntsA = contours(yellow_mask)
     cntsV = contours(green_mask)
     cntsAz = contours(blue_mask)
     cntsM = contours(purple_mask)
 
-    color_area(cntsR, frame, colores["rojo"]["nombre"], area, colores["rojo"]["referencia"])
+    color_area(cntsR1, frame, colores["rojo1"]["nombre"], area, colores["rojo1"]["referencia"])
+    color_area(cntsR2, frame, colores["rojo2"]["nombre"], area, colores["rojo2"]["referencia"])
     color_area(cntsN, frame, colores["naranja"]["nombre"], area, colores["naranja"]["referencia"])
     color_area(cntsA, frame, colores["amarillo"]["nombre"], area, colores["amarillo"]["referencia"])
     color_area(cntsV, frame, colores["verde"]["nombre"], area, colores["verde"]["referencia"])
@@ -153,20 +156,22 @@ def colors_pixels(frame:tuple) -> tuple:
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    red_mask = red_ranges(hsv, "rojo")
+    red1_mask = cv2.inRange(hsv, colores["rojo1"]["bajo"], colores["rojo1"]["alto"])
+    red2_mask = cv2.inRange(hsv, colores["rojo2"]["bajo"], colores["rojo2"]["alto"])
     orange_mask = cv2.inRange(hsv, colores["naranja"]["bajo"], colores["naranja"]["alto"])
     yellow_mask = cv2.inRange(hsv, colores["amarillo"]["bajo"], colores["amarillo"]["alto"])
     green_mask = cv2.inRange(hsv, colores["verde"]["bajo"], colores["verde"]["alto"])
     blue_mask = cv2.inRange(hsv, colores["azul"]["bajo"], colores["azul"]["alto"])
     purple_mask = cv2.inRange(hsv, colores["morado"]["bajo"], colores["morado"]["alto"])
 
-    colors_frame = cv2.add(red_mask, orange_mask)
+    colors_frame = cv2.add(red1_mask, red2_mask)
+    colors_frame = cv2.add(colors_frame, orange_mask)
     colors_frame = cv2.add(colors_frame, yellow_mask)
     colors_frame = cv2.add(colors_frame, green_mask)
     colors_frame = cv2.add(colors_frame, blue_mask)
     colors_frame = cv2.add(colors_frame, purple_mask)
 
-    color = cv2.bitwise_and(frame, frame, mask= colors_frame)
+    color = cv2.bitwise_and(frame, frame, mask = colors_frame)
 
     return color
 
@@ -201,29 +206,21 @@ def HSV_color(frame:tuple, area:int, low_H:int, low_S:int, low_V:int, up_H:int, 
     color_name = ''
     color_reference = np.array([255, 255, 255])
 
-    if low_H >= 0 and up_H <= 3 or low_H >= 175 and up_H <= 179:
-        color_name = colores['rojo']["nombre"]
-        color_reference = colores['rojo']["referencia"]
+    for name, valores_color in colores.items():
 
-    if low_H >= 4 and up_H <= 15:
-        color_name = colores['naranja']["nombre"]
-        color_reference = colores['naranja']["referencia"]
+        bajo = valores_color['bajo'][0]
+        alto = valores_color['alto'][0]
 
-    if low_H >= 25 and up_H <= 35:
-        color_name = colores['amarillo']["nombre"]
-        color_reference = colores['amarillo']["referencia"]
+        bajo = int(bajo)
+        alto = int(alto)
 
-    if low_H >= 36 and up_H <= 60:
-        color_name = colores['verde']["nombre"]
-        color_reference = colores['verde']["referencia"]
+        if bajo <= low_H <= alto and bajo <= up_H <= alto:
 
-    if low_H >= 80 and up_H <= 125:
-        color_name = colores['azul']["nombre"]
-        color_reference = colores['azul']["referencia"]
+            color_name = valores_color['nombre']
+            color_reference = valores_color['referencia']
 
-    if low_H >= 130 and up_H <= 140:
-        color_name = colores['morado']["nombre"]
-        color_reference = colores['morado']["referencia"]
+        else:
+            pass
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv, np.array([low_H, low_S, low_V]), np.array([up_H, up_S, up_V]))
@@ -246,10 +243,7 @@ def name_pixeles(frame:tuple, color_name:str) -> tuple:
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    if color_name == "rojo":
-        mask = red_ranges(hsv, color_name)
-    else:
-        mask = cv2.inRange(hsv, np.array(colores[color_name]["bajo"]), np.array(colores[color_name]["alto"]))
+    mask = cv2.inRange(hsv, np.array(colores[color_name]["bajo"]), np.array(colores[color_name]["alto"]))
 
     color = cv2.bitwise_and(frame, frame, mask= mask)
 
@@ -267,10 +261,7 @@ def name_color(frame:tuple, area:int, color_name:str) -> tuple:
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    if color_name == "rojo":
-        mask = red_ranges(hsv, color_name)
-    else:
-        mask = cv2.inRange(hsv, np.array(colores[color_name]["bajo"]), np.array(colores[color_name]["alto"]))
+    mask = cv2.inRange(hsv, np.array(colores[color_name]["bajo"]), np.array(colores[color_name]["alto"]))
 
     contour = contours(mask)
 
