@@ -238,7 +238,12 @@ def name_pixeles(frame:tuple, color_name:str) -> tuple:
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    mask = cv2.inRange(hsv, np.array(colores[color_name]["bajo"]), np.array(colores[color_name]["alto"]))
+    if color_name == "rojo":
+        red1_mask = cv2.inRange(hsv, colores["rojo1"]["bajo"], colores["rojo1"]["alto"])
+        red2_mask = cv2.inRange(hsv, colores["rojo2"]["bajo"], colores["rojo2"]["alto"])
+        mask = cv2.add(red1_mask, red2_mask)
+    else:
+        mask = cv2.inRange(hsv, np.array(colores[color_name]["bajo"]), np.array(colores[color_name]["alto"]))
 
     color = cv2.bitwise_and(frame, frame, mask= mask)
 
@@ -258,7 +263,13 @@ def name_color(frame:tuple, area:int, color_name:str) -> tuple:
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-    mask = cv2.inRange(hsv, np.array(colores[color_name]["bajo"]), np.array(colores[color_name]["alto"]))
+    if color_name == "rojo":
+        red1_mask = cv2.inRange(hsv, colores["rojo1"]["bajo"], colores["rojo1"]["alto"])
+        red2_mask = cv2.inRange(hsv, colores["rojo2"]["bajo"], colores["rojo2"]["alto"])
+        mask = cv2.add(red1_mask, red2_mask)
+        color_name = "rojo1"
+    else:
+        mask = cv2.inRange(hsv, np.array(colores[color_name]["bajo"]), np.array(colores[color_name]["alto"]))
 
     contour = contours(mask)
 
