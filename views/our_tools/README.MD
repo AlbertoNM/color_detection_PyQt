@@ -1,4 +1,4 @@
-## colors
+# colors
 
 Aquí se encuentra un diccionario con rangos de colores por default. Los colores son:
 
@@ -46,7 +46,7 @@ La variable `colores` contiene el diccionario de los colores; como podemos obser
 
 El nombre y referencia son utilizados para fines referenciales valga la redundancia, ya que el programa al hacer una detección utiliza el nombre y su color de referencia RGB para resaltar las áreas detectadas.
 
-## tools
+# tools
 
 ### color_area
 
