@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import imutils
-from .colors import colores
+from ..data.colors import colores
 
 def color_area(mask:tuple, frame:tuple, text:str, area:int, color:tuple) -> None:
 

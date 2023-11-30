@@ -10,7 +10,7 @@ from PyQt5 import QtGui
 
 #! Importaciones de datos y herramientas
 
-from .our_tools.colors import colores
+from .data.colors import colores
 from .our_tools.tools import *
 from .data.datos import *
 from window_ui import Ui_MainWindow
