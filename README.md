@@ -11,9 +11,9 @@ Interfaz para la detección de distintos rangos de colores
 * PyQt5-Qt5==5.15.2
 * PyQt5-sip==12.12.2
 
-## Ambiente virtual
+## Opciones de ambiente virtual
 
-### VENV
+### Opcción 1: VENV
 
 Para poder correr el programa deberá crear un ambiente virtual dentro de la carpeta del proyecto con el comando siguiente:
 
@@ -50,7 +50,7 @@ Una vez instaladas las librerías, podrá iniciar la aplicación corriendo el ar
 ```Shell
 python main.py
 ```
-### Anaconda
+### Opción 2: Anaconda
 
 Si su ambiente virtual se encuentra en anaconda, le recomendamos intalar las dependencias de la siguiente manera:
 
@@ -78,6 +78,11 @@ images contiene una imagen guía acerca de los rangos de colores HSV.
 ![reference](./images/guide.JPG)
 
 Esta imagen se puede visualizar en el programa en la pestaña de *ayuda*.
+
+Puede probar y manipular manualmente los valores HSV sin necesidad de correr la cámara del programa; igualmente, existen distintas páginas para generar colores mediante valores HSV, aquí hay algunas:
+
+* https://www.selecolor.com/en/hsv-color-picker/
+* https://www.peko-step.com/es/tool/hsvrgb.html
 
 ### /styles
 
