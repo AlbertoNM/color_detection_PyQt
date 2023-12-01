@@ -13,7 +13,7 @@ Interfaz para la detección de distintos rangos de colores
 
 ## Opciones de ambiente virtual
 
-### Opcción 1: VENV
+### Opción 1: VENV
 
 Para poder correr el programa deberá crear un ambiente virtual dentro de la carpeta del proyecto con el comando siguiente:
 
